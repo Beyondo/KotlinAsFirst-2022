@@ -2,7 +2,11 @@
 
 package lesson1.task1
 
-import junit.framework.TestCase.assertEquals
+import junit.framework.TestCase.*
+import lesson2.task1.*
+import lesson2.task2.*
+import lesson3.task1.*
+import org.junit.Assert.assertNotEquals
 import kotlin.math.*
 
 // Урок 1: простые функции
@@ -53,12 +57,21 @@ fun quadraticRootProduct(a: Double, b: Double, c: Double): Double {
 /**
  * Пример главной функции
  */
+fun rightTriangle(N: Int)
+{
+    var str : String = "";
+    for(x in 1.. N)
+    {
+        str += x;
+        println(str);
+    }
+}
 fun main() {
-    //val x1x2 = quadraticRootProduct(1.0, 13.0, 42.0)
-    //println("Root product: $x1x2")
     println("STARTED")
-    //assertEquals(874, numberRevert(478))
-    //assertEquals(201, numberRevert(102))
+    assertEquals(0.0, sin(0.0, 1e-5), 1e-5)
+    assertEquals(1.0, sin(PI / 2.0, 1e-5), 1e-5)
+    assertEquals(0.0, sin(PI, 1e-5), 1e-5)
+    assertEquals(-1.0, sin(3.0 * PI / 2.0, 1e-5), 1e-5)
     println("ENDED")
 }
 

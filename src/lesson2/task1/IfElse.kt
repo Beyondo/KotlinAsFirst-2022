@@ -2,8 +2,11 @@
 
 package lesson2.task1
 
+import com.sun.javafx.geom.Vec2f
 import lesson1.task1.discriminant
+import kotlin.math.acos
 import kotlin.math.max
+import kotlin.math.min
 import kotlin.math.sqrt
 
 // Урок 2: ветвления (здесь), логический тип (см. 2.2).
@@ -68,7 +71,15 @@ fun minBiRoot(a: Double, b: Double, c: Double): Double {
  * Мой возраст. Для заданного 0 < n < 200, рассматриваемого как возраст человека,
  * вернуть строку вида: «21 год», «32 года», «12 лет».
  */
-fun ageDescription(age: Int): String = TODO()
+fun ageDescription(age: Int): String {
+    // последняя цифра
+    val d = age % 10
+    val yrsMsg =
+        if ((age % 100) != 11 && d == 1) "год"
+        else if ((age > 21 || age < 5) && (d == 2 || d == 3 || d == 4)) "года"
+        else "лет"
+    return "$age $yrsMsg"
+}
 
 /**
  * Простая (2 балла)
@@ -81,7 +92,19 @@ fun timeForHalfWay(
     t1: Double, v1: Double,
     t2: Double, v2: Double,
     t3: Double, v3: Double
-): Double = TODO()
+): Double {
+    val distances = arrayOf(v1 * t1, v2 * t2, v3 * t3)
+    val halfD = distances.sum() / 2.0
+    var ratio = min(1.0, (halfD / distances[0]))
+    var time = ratio * t1
+    if(ratio == 1.0) {
+        ratio = min(1.0, ((halfD - distances[0]) / distances[1]))
+        time += ratio * t2
+        if(ratio == 1.0)
+            time += min(1.0, ((halfD - distances[1]) / distances[2])) * t3
+    }
+    return time
+}
 
 /**
  * Простая (2 балла)
@@ -96,7 +119,11 @@ fun whichRookThreatens(
     kingX: Int, kingY: Int,
     rookX1: Int, rookY1: Int,
     rookX2: Int, rookY2: Int
-): Int = TODO()
+): Int {
+    val rook1 = rookX1 == kingX || rookY1 == kingY
+    val rook2 = rookX2 == kingX || rookY2 == kingY
+    return if (rook1 && rook2) 3 else if (rook2) 2 else if (rook1) 1 else 0
+}
 
 /**
  * Простая (2 балла)
@@ -112,7 +139,14 @@ fun rookOrBishopThreatens(
     kingX: Int, kingY: Int,
     rookX: Int, rookY: Int,
     bishopX: Int, bishopY: Int
-): Int = TODO()
+): Int {
+    val rook = rookX == kingX || rookY == kingY
+    val direction = Vec2f((kingX - bishopX).toFloat(), (kingY - bishopY).toFloat())
+    val length = sqrt((direction.x * direction.x) + (direction.y * direction.y))
+    val theta = Math.toDegrees(acos(direction.x / length).toDouble()).toInt()
+    val bishop = theta % 45 == 0 && theta % 90 != 0
+    return if (rook && bishop) 3 else if (bishop) 2 else if (rook) 1 else 0;
+}
 
 /**
  * Простая (2 балла)
@@ -122,7 +156,13 @@ fun rookOrBishopThreatens(
  * прямоугольным (вернуть 1) или тупоугольным (вернуть 2).
  * Если такой треугольник не существует, вернуть -1.
  */
-fun triangleKind(a: Double, b: Double, c: Double): Int = TODO()
+fun triangleKind(a: Double, b: Double, c: Double): Int {
+    if (a + b < c || a + c < b || c + b < a) return -1
+    val sides = arrayOf(a, b, c).sorted()
+    val left = (sides[0] * sides[0]) + (sides[1] * sides[1])
+    val right = sides[2] * sides[2]
+    return if (left < right) 2 else if (left > right) 0 else 1
+}
 
 /**
  * Средняя (3 балла)
@@ -132,4 +172,10 @@ fun triangleKind(a: Double, b: Double, c: Double): Int = TODO()
  * Найти длину пересечения отрезков AB и CD.
  * Если пересечения нет, вернуть -1.
  */
-fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int = TODO()
+fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int {
+    var A = a; var B = b; var C = c; var D = d
+    if (A > B) A = B.also { B = A }
+    if (C > D) C = D.also { D = C }
+    if (A > D || B < C) return -1
+    return min(B, D) - max(A, C)
+}
