@@ -2,7 +2,9 @@
 
 package lesson3.task1
 
+import java.lang.Math.pow
 import kotlin.math.abs
+import kotlin.math.pow
 import kotlin.math.sqrt
 
 // Урок 3: циклы
@@ -239,7 +241,6 @@ fun hasDifferentDigits(n: Int): Boolean {
     }
     return false
 }
-
 /**
  * Средняя (4 балла)
  *
@@ -255,15 +256,15 @@ fun sin(x: Double, eps: Double): Double {
     var fact = 1.0
     var pow = x
     var i = 2
-    var currentEpsilon = 1.0
+    var term: Double
     do {
-        res += (sign * pow / fact)
+        term = pow / fact
+        res += (sign * term)
         sign *= -1.0
         fact *= i * (i + 1)
         pow *= x * x // x *= x²
         i += 2
-        currentEpsilon /= sqrt(i.toDouble())
-    } while (currentEpsilon > eps)
+    } while (term > eps)
     return res
 }
 
