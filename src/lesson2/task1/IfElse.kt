@@ -2,7 +2,6 @@
 
 package lesson2.task1
 
-import com.sun.javafx.geom.Vec2f
 import lesson1.task1.discriminant
 import kotlin.math.acos
 import kotlin.math.max
