@@ -2,7 +2,6 @@
 
 package lesson3.task1
 
-import java.lang.Math.pow
 import kotlin.math.abs
 import kotlin.math.pow
 import kotlin.math.sqrt
@@ -241,6 +240,7 @@ fun hasDifferentDigits(n: Int): Boolean {
     }
     return false
 }
+
 /**
  * Средняя (4 балла)
  *
@@ -250,11 +250,13 @@ fun hasDifferentDigits(n: Int): Boolean {
  * Подумайте, как добиться более быстрой сходимости ряда при больших значениях x.
  * Использовать kotlin.math.sin и другие стандартные реализации функции синуса в этой задаче запрещается.
  */
+
 fun sin(x: Double, eps: Double): Double {
+    val theta = x % (2 * Math.PI)
     var res = 0.0
     var sign = 1.0
     var fact = 1.0
-    var pow = x
+    var pow = theta
     var i = 2
     var term: Double
     do {
@@ -262,12 +264,11 @@ fun sin(x: Double, eps: Double): Double {
         res += (sign * term)
         sign *= -1.0
         fact *= i * (i + 1)
-        pow *= x * x // x *= x²
+        pow *= theta * theta // x *= x²
         i += 2
     } while (term > eps)
     return res
 }
-
 /**
  * Средняя (4 балла)
  *
