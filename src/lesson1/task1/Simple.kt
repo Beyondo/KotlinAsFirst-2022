@@ -68,13 +68,12 @@ fun rightTriangle(N: Int)
 }
 fun main() {
     println("STARTED")
-    assertEquals(0.0, sin(0.0, 1e-5), 1e-5)
-    assertEquals(1.0, sin(PI / 2.0, 1e-5), 1e-5)
-    assertEquals(0.0, sin(PI, 1e-5), 1e-5)
-    assertEquals(-1.0, sin(3.0 * PI / 2.0, 1e-5), 1e-5)
-    assertEquals(0.0, sin(100 * PI, 1e-5), 1e-5)
-    assertNotEquals(kotlin.math.sin(1.0), sin(1.0, 1.0))
-    assertNotEquals(kotlin.math.sin(-0.5), sin(-0.5, 1.0))
+    assertEquals("1 год", ageDescription(1))
+    assertEquals("21 год", ageDescription(21))
+    assertEquals("132 года", ageDescription(132))
+    assertEquals("12 лет", ageDescription(12))
+    assertEquals("111 лет", ageDescription(111))
+    assertEquals("199 лет", ageDescription(199))
     println("ENDED")
 }
 
