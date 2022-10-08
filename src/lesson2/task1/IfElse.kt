@@ -3,7 +3,7 @@
 package lesson2.task1
 
 import lesson1.task1.discriminant
-import kotlin.math.acos
+import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.sqrt
@@ -72,12 +72,11 @@ fun minBiRoot(a: Double, b: Double, c: Double): Double {
  */
 fun ageDescription(age: Int): String {
     // последняя цифра
-    val d = age % 10
-    val yrsMsg =
-        if ((age % 100) != 11 && d == 1) "год"
-        else if ((age > 21 || age < 5) && (d == 2 || d == 3 || d == 4)) "года"
+    val desc =
+        if (age % 10 == 1 && age % 100 != 11) "год"
+        else if (age % 10 in 2..4 && (age % 100 < 10 || age % 100 >= 20)) "года"
         else "лет"
-    return "$age $yrsMsg"
+    return "$age $desc"
 }
 
 /**
@@ -92,17 +91,11 @@ fun timeForHalfWay(
     t2: Double, v2: Double,
     t3: Double, v3: Double
 ): Double {
-    val distances = arrayOf(v1 * t1, v2 * t2, v3 * t3)
-    val halfD = distances.sum() / 2.0
-    var ratio = min(1.0, (halfD / distances[0]))
-    var time = ratio * t1
-    if(ratio == 1.0) {
-        ratio = min(1.0, ((halfD - distances[0]) / distances[1]))
-        time += ratio * t2
-        if(ratio == 1.0)
-            time += min(1.0, ((halfD - distances[1]) / distances[2])) * t3
-    }
-    return time
+    val s1 = t1 * v1
+    val s2 = t2 * v2
+    val s3 = t3 * v3
+    val s = (s1 + s2 + s3) / 2
+    return if (s <= s1) s / v1 else if (s <= s1 + s2) t1 + (s - s1) / v2 else t1 + t2 + ((s - s1 - s2) / v3)
 }
 
 /**
@@ -139,13 +132,9 @@ fun rookOrBishopThreatens(
     rookX: Int, rookY: Int,
     bishopX: Int, bishopY: Int
 ): Int {
-    val rook = rookX == kingX || rookY == kingY
-    val directionX = (kingX - bishopX).toFloat()
-    val directionY = (kingY - bishopY).toFloat()
-    val length = sqrt((directionX * directionX) + (directionY * directionY))
-    val theta = Math.toDegrees(acos(directionX / length).toDouble()).toInt()
-    val bishop = theta % 45 == 0 && theta % 90 != 0
-    return if (rook && bishop) 3 else if (bishop) 2 else if (rook) 1 else 0;
+    val rook = kingX == rookX || kingY == rookY
+    val bishop = abs(kingX - bishopX) == abs(kingY - bishopY)
+    return if (rook && bishop) 3 else if (bishop) 2 else if (rook) 1 else 0
 }
 
 /**
