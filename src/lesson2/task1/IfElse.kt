@@ -141,9 +141,10 @@ fun rookOrBishopThreatens(
     bishopX: Int, bishopY: Int
 ): Int {
     val rook = rookX == kingX || rookY == kingY
-    val direction = Vec2f((kingX - bishopX).toFloat(), (kingY - bishopY).toFloat())
-    val length = sqrt((direction.x * direction.x) + (direction.y * direction.y))
-    val theta = Math.toDegrees(acos(direction.x / length).toDouble()).toInt()
+    val directionX = (kingX - bishopX).toFloat()
+    val directionY = (kingY - bishopY).toFloat()
+    val length = sqrt((directionX * directionX) + (directionY * directionY))
+    val theta = Math.toDegrees(acos(directionX / length).toDouble()).toInt()
     val bishop = theta % 45 == 0 && theta % 90 != 0
     return if (rook && bishop) 3 else if (bishop) 2 else if (rook) 1 else 0;
 }
