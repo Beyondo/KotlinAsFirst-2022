@@ -3,7 +3,6 @@
 package lesson3.task1
 
 import kotlin.math.abs
-import kotlin.math.pow
 import kotlin.math.sqrt
 
 // Урок 3: циклы
@@ -75,12 +74,12 @@ fun digitCountInNumber(n: Int, m: Int): Int =
  * Использовать операции со строками в этой задаче запрещается.
  */
 fun digitNumber(n: Int): Int {
-    var N = n
+    var unum = abs(n)
     var count = 0
     do {
-        N /= 10
+        unum /= 10
         count++
-    } while (N > 0)
+    } while (unum > 0)
     return count
 }
 
@@ -252,22 +251,22 @@ fun hasDifferentDigits(n: Int): Boolean {
  */
 
 fun sin(x: Double, eps: Double): Double {
-    val theta = x % (2 * Math.PI)
-    var res = 0.0
-    var sign = 1.0
-    var fact = 1.0
+    val theta = abs(x) % (2 * Math.PI)
+    var sign = if (x > 0) 1.0 else -1.0
     var pow = theta
+    var fact = 1.0
+    var sum = 0.0
     var i = 2
     var term: Double
     do {
         term = pow / fact
-        res += (sign * term)
+        sum += (sign * term)
         sign *= -1.0
         fact *= i * (i + 1)
         pow *= theta * theta // x *= x²
         i += 2
     } while (term > eps)
-    return res
+    return sum
 }
 /**
  * Средняя (4 балла)
