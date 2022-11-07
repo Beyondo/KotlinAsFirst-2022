@@ -2,8 +2,7 @@
 
 package lesson3.task1
 
-import kotlin.math.abs
-import kotlin.math.sqrt
+import kotlin.math.*
 
 // Урок 3: циклы
 // Максимальное количество баллов = 9
@@ -251,19 +250,21 @@ fun hasDifferentDigits(n: Int): Boolean {
  */
 
 fun sin(x: Double, eps: Double): Double {
-    val theta = abs(x) % (2 * Math.PI)
-    var sign = if (x > 0) 1.0 else -1.0
-    var pow = theta
-    var fact = 1.0
+    val theta = abs(x) % (2 * Math.PI) // нормализации
+    var sign = if (x >= 0) 1.0 else -1.0
     var sum = 0.0
+    // параметры синуса
+    var fact = 1.0
+    var pow = theta
     var i = 2
+    //
     var term: Double
     do {
         term = pow / fact
         sum += (sign * term)
         sign *= -1.0
         fact *= i * (i + 1)
-        pow *= theta * theta // x *= x²
+        pow *= theta * theta
         i += 2
     } while (term > eps)
     return sum
@@ -277,7 +278,26 @@ fun sin(x: Double, eps: Double): Double {
  * Подумайте, как добиться более быстрой сходимости ряда при больших значениях x.
  * Использовать kotlin.math.cos и другие стандартные реализации функции косинуса в этой задаче запрещается.
  */
-fun cos(x: Double, eps: Double): Double = TODO()
+fun cos(x: Double, eps: Double): Double {
+    val theta = abs(x) % (2 * Math.PI) // нормализации
+    var sign = if (x >= 0) 1.0 else -1.0
+    var sum = 0.0
+    // параметры косинуса
+    var fact = 1.0
+    var pow = 1.0
+    var i = 1
+    //
+    var term: Double
+    do {
+        term = pow / fact
+        sum += (sign * term)
+        sign *= -1.0
+        fact *= i * (i + 1)
+        pow *= theta * theta
+        i += 2
+    } while (term > eps)
+    return sum
+}
 
 /**
  * Сложная (4 балла)
@@ -288,7 +308,17 @@ fun cos(x: Double, eps: Double): Double = TODO()
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun squareSequenceDigit(n: Int): Int = TODO()
+fun squareSequenceDigit(n: Int): Int {
+    var i = 1
+    var count = 0
+    var square = 0
+    while (count < n) {
+        square = i * i
+        count += digitNumber(square)
+        i++
+    }
+    return (square / 10.0.pow(count - n)).toInt() % 10
+}
 
 /**
  * Сложная (5 баллов)
@@ -299,4 +329,14 @@ fun squareSequenceDigit(n: Int): Int = TODO()
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun fibSequenceDigit(n: Int): Int = TODO()
+fun fibSequenceDigit(n: Int): Int {
+    var i = 1
+    var count = 0
+    var fib = 0
+    while (count < n) {
+        fib = fib(i)
+        count += digitNumber(fib)
+        i++
+    }
+    return (fib / 10.0.pow(count - n)).toInt() % 10
+}

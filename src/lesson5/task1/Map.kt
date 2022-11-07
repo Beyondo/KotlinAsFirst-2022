@@ -96,7 +96,17 @@ fun buildWordSet(text: List<String>): MutableSet<String> {
  *   buildGrades(mapOf("Марат" to 3, "Семён" to 5, "Михаил" to 5))
  *     -> mapOf(5 to listOf("Семён", "Михаил"), 3 to listOf("Марат"))
  */
-fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> = TODO()
+fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> {
+    val res = mutableMapOf<Int, MutableList<String>>()
+    for ((name, grade) in grades) {
+        if (grade in res) {
+            res[grade]!!.add(name)
+        } else {
+            res[grade] = mutableListOf(name)
+        }
+    }
+    return res
+}
 
 /**
  * Простая (2 балла)
@@ -108,7 +118,14 @@ fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> = TODO()
  *   containsIn(mapOf("a" to "z"), mapOf("a" to "z", "b" to "sweet")) -> true
  *   containsIn(mapOf("a" to "z"), mapOf("a" to "zee", "b" to "sweet")) -> false
  */
-fun containsIn(a: Map<String, String>, b: Map<String, String>): Boolean = TODO()
+fun containsIn(a: Map<String, String>, b: Map<String, String>): Boolean {
+    for ((key, value) in a) {
+        if (b[key] != value) {
+            return false
+        }
+    }
+    return true
+}
 
 /**
  * Простая (2 балла)
@@ -125,7 +142,11 @@ fun containsIn(a: Map<String, String>, b: Map<String, String>): Boolean = TODO()
  *     -> a changes to mutableMapOf() aka becomes empty
  */
 fun subtractOf(a: MutableMap<String, String>, b: Map<String, String>) {
-    TODO()
+    for ((key, value) in b) {
+        if (a[key] == value) {
+            a.remove(key)
+        }
+    }
 }
 
 /**
@@ -135,7 +156,7 @@ fun subtractOf(a: MutableMap<String, String>, b: Map<String, String>) {
  * В выходном списке не должно быть повторяющихся элементов,
  * т. е. whoAreInBoth(listOf("Марат", "Семён, "Марат"), listOf("Марат", "Марат")) == listOf("Марат")
  */
-fun whoAreInBoth(a: List<String>, b: List<String>): List<String> = TODO()
+fun whoAreInBoth(a: List<String>, b: List<String>): List<String> = a.intersect(b).toList()
 
 /**
  * Средняя (3 балла)
@@ -154,7 +175,23 @@ fun whoAreInBoth(a: List<String>, b: List<String>): List<String> = TODO()
  *     mapOf("Emergency" to "911", "Police" to "02")
  *   ) -> mapOf("Emergency" to "112, 911", "Police" to "02")
  */
-fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<String, String> = TODO()
+fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<String, String> {
+    val result = mutableMapOf<String, String>()
+    for ((key, value) in mapA) {
+        result[key] = value
+    }
+    for ((key, value) in mapB) {
+        if (result[key] == value) {
+            continue
+        }
+        if (result[key] == null) {
+            result[key] = value
+        } else {
+            result[key] = result[key] + ", " + value
+        }
+    }
+    return result
+}
 
 /**
  * Средняя (4 балла)
@@ -166,7 +203,23 @@ fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<S
  *   averageStockPrice(listOf("MSFT" to 100.0, "MSFT" to 200.0, "NFLX" to 40.0))
  *     -> mapOf("MSFT" to 150.0, "NFLX" to 40.0)
  */
-fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Double> = TODO()
+fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Double> {
+    val result = mutableMapOf<String, Double>()
+    val count = mutableMapOf<String, Int>()
+    for ((key, value) in stockPrices) {
+        if (result[key] == null) {
+            result[key] = value
+            count[key] = 1
+        } else {
+            result[key] = result[key]!! + value
+            count[key] = count[key]!! + 1
+        }
+    }
+    for ((key, value) in result) {
+        result[key] = value / count[key]!!
+    }
+    return result
+}
 
 /**
  * Средняя (4 балла)
@@ -183,7 +236,17 @@ fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Doub
  *     "печенье"
  *   ) -> "Мария"
  */
-fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): String? = TODO()
+fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): String? {
+    var result: String? = null
+    var min = Double.MAX_VALUE
+    for ((key, value) in stuff) {
+        if (value.first == kind && value.second < min) {
+            min = value.second
+            result = key
+        }
+    }
+    return result
+} 
 
 /**
  * Средняя (3 балла)
@@ -194,7 +257,13 @@ fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): S
  * Например:
  *   canBuildFrom(listOf('a', 'b', 'o'), "baobab") -> true
  */
-fun canBuildFrom(chars: List<Char>, word: String): Boolean = TODO()
+fun canBuildFrom(chars: List<Char>, word: String): Boolean {
+    val charsSet = chars.toSet()
+    for (i in word)
+        if (i.toLowerCase() !in charsSet)
+            return false
+    return true
+}
 
 /**
  * Средняя (4 балла)
@@ -208,7 +277,17 @@ fun canBuildFrom(chars: List<Char>, word: String): Boolean = TODO()
  * Например:
  *   extractRepeats(listOf("a", "b", "a")) -> mapOf("a" to 2)
  */
-fun extractRepeats(list: List<String>): Map<String, Int> = TODO()
+fun extractRepeats(list: List<String>): Map<String, Int> {
+    val result = mutableMapOf<String, Int>()
+    for (i in list) {
+        if (result[i] == null) {
+            result[i] = 1
+        } else {
+            result[i] = result[i]!! + 1
+        }
+    }
+    return result.filter { it.value > 1 }
+}
 
 /**
  * Средняя (3 балла)
@@ -222,7 +301,18 @@ fun extractRepeats(list: List<String>): Map<String, Int> = TODO()
  * Например:
  *   hasAnagrams(listOf("тор", "свет", "рот")) -> true
  */
-fun hasAnagrams(words: List<String>): Boolean = TODO()
+fun hasAnagrams(words: List<String>): Boolean {
+    val result = mutableMapOf<String, Int>()
+    for (i in words) {
+        val sorted = i.toList().sorted()
+        if (result[sorted.toString()] == null) {
+            result[sorted.toString()] = 1
+        } else {
+            result[sorted.toString()] = result[sorted.toString()]!! + 1
+        }
+    }
+    return result.values.any { it > 1 }
+}
 
 /**
  * Сложная (5 баллов)

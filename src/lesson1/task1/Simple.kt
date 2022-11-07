@@ -6,6 +6,9 @@ import junit.framework.TestCase.*
 import lesson2.task1.*
 import lesson2.task2.*
 import lesson3.task1.*
+import lesson4.task1.*
+import lesson5.task1.*
+import org.junit.Assert.assertArrayEquals
 import org.junit.Assert.assertNotEquals
 import kotlin.math.*
 
@@ -68,12 +71,38 @@ fun rightTriangle(N: Int)
 }
 fun main() {
     println("STARTED")
-    assertEquals("1 год", ageDescription(1))
-    assertEquals("21 год", ageDescription(21))
-    assertEquals("132 года", ageDescription(132))
-    assertEquals("12 лет", ageDescription(12))
-    assertEquals("111 лет", ageDescription(111))
-    assertEquals("199 лет", ageDescription(199))
+    assertEquals(
+        mapOf(
+            "Marat" to setOf("Mikhail", "Sveta"),
+            "Sveta" to setOf("Mikhail"),
+            "Mikhail" to setOf()
+        ),
+        propagateHandshakes(
+            mapOf(
+                "Marat" to setOf("Sveta"),
+                "Sveta" to setOf("Mikhail")
+            )
+        )
+    )
+    assertEquals(
+        mapOf(
+            "Marat" to setOf("Mikhail", "Sveta"),
+            "Sveta" to setOf("Marat", "Mikhail"),
+            "Mikhail" to setOf("Sveta", "Marat"),
+            "Friend" to setOf("GoodGnome"),
+            "EvilGnome" to setOf(),
+            "GoodGnome" to setOf()
+        ),
+        propagateHandshakes(
+            mapOf(
+                "Marat" to setOf("Mikhail", "Sveta"),
+                "Sveta" to setOf("Marat"),
+                "Mikhail" to setOf("Sveta"),
+                "Friend" to setOf("GoodGnome"),
+                "EvilGnome" to setOf()
+            )
+        )
+    )
     println("ENDED")
 }
 
