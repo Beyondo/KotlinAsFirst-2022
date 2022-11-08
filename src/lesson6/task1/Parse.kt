@@ -137,30 +137,23 @@ fun dateDigitToStr(digital: String): String {
 }
 
 /**
-* Average (4 points)
-*
-* The phone number is given by a string like "+7 (921) 123-45-67".
-* The prefix (+7) may be missing, the area code (in parentheses) may also be missing.
-* There may be an unlimited number of spaces and dashes,
-* for example, the number 12 -- 34- 5 -- 67 -89 should also be considered legal.
-* Convert the number to a format without brackets, spaces and dashes (but with +), for example,
-* "+79211234567" or "123456789" for the examples given.
-* All characters in the number, except digits, spaces and +-(), are considered invalid.
-* If the format is incorrect, return an empty string.
-*
-* * P S: Additional examples of the function can be found in the corresponding tests.
-*/
+ * Средняя (4 балла)
+ *
+ * Номер телефона задан строкой вида "+7 (921) 123-45-67".
+ * Префикс (+7) может отсутствовать, код города (в скобках) также может отсутствовать.
+ * Может присутствовать неограниченное количество пробелов и чёрточек,
+ * например, номер 12 --  34- 5 -- 67 -89 тоже следует считать легальным.
+ * Перевести номер в формат без скобок, пробелов и чёрточек (но с +), например,
+ * "+79211234567" или "123456789" для приведённых примеров.
+ * Все символы в номере, кроме цифр, пробелов и +-(), считать недопустимыми.
+ * При неверном формате вернуть пустую строку.
+ *
+ * PS: Дополнительные примеры работы функции можно посмотреть в соответствующих тестах.
+ */
 fun flattenPhoneNumber(phone: String): String {
-    val phoneWithoutSpaces = phone.filter { it != ' ' }
-    val phoneWithoutDashes = phoneWithoutSpaces.filter { it != '-' }
-    val phoneWithoutBrackets = phoneWithoutDashes.filter { it != '(' && it != ')' }
-    val phoneWithoutPlus = phoneWithoutBrackets.filter { it != '+' }
-    if (phoneWithoutPlus.any { it !in '0'..'9' }) return ""
-    if (phoneWithoutPlus.length !in 10..11) return ""
-    if (phoneWithoutPlus.length == 11 && phoneWithoutPlus[0] != '8') return ""
-    if (phoneWithoutPlus.length == 10 && phoneWithoutPlus[0] == '8') return ""
-    if (phoneWithoutPlus.length == 11 && phoneWithoutPlus[0] == '8') return "+" + phoneWithoutPlus.drop(1)
-    return "+" + phoneWithoutPlus
+    if (Regex("""\(\)""").containsMatchIn(phone)) return ""
+    if (Regex("""[^0-9\s-+()]""").containsMatchIn(phone)) return ""
+    return phone.replace(Regex("""\s|-"""), "").replace(Regex("""\(|\)"""), "")
 }
 
 /**
@@ -344,12 +337,6 @@ fun fromRoman(roman: String): Int {
  * IllegalArgumentException должен бросаться даже если ошибочная команда не была достигнута в ходе выполнения.
  *
  */
-// Must pass these assertions:
-// assertEquals(listOf(-1, -1, -1, -1, -1, 0, 0, 0, 0, 0), computeDeviceCells(10, "<-<-<-<-<-", 10000))
-// assertEquals(listOf(1, 1, 1, 1, 1, 0, 0, 0, 0, 0), computeDeviceCells(10, "- <<<<< +[>+]", 10000))
-// assertThrows(IllegalArgumentException::class.java) { computeDeviceCells(10, "===", 3) }
-// assertThrows(IllegalArgumentException::class.java) { computeDeviceCells(10, "+>+>[+>", 3) }
-// assertThrows(IllegalStateException::class.java) { computeDeviceCells(20, ">>>>>>>>>>>>>", 12) }
 fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
     val result = mutableListOf<Int>()
     for (i in 0 until cells) {
