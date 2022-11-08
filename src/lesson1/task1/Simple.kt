@@ -8,8 +8,10 @@ import lesson2.task2.*
 import lesson3.task1.*
 import lesson4.task1.*
 import lesson5.task1.*
+import lesson6.task1.*
 import org.junit.Assert.assertArrayEquals
 import org.junit.Assert.assertNotEquals
+
 import kotlin.math.*
 
 // Урок 1: простые функции
@@ -60,49 +62,8 @@ fun quadraticRootProduct(a: Double, b: Double, c: Double): Double {
 /**
  * Пример главной функции
  */
-fun rightTriangle(N: Int)
-{
-    var str : String = "";
-    for(x in 1.. N)
-    {
-        str += x;
-        println(str);
-    }
-}
 fun main() {
     println("STARTED")
-    assertEquals(
-        mapOf(
-            "Marat" to setOf("Mikhail", "Sveta"),
-            "Sveta" to setOf("Mikhail"),
-            "Mikhail" to setOf()
-        ),
-        propagateHandshakes(
-            mapOf(
-                "Marat" to setOf("Sveta"),
-                "Sveta" to setOf("Mikhail")
-            )
-        )
-    )
-    assertEquals(
-        mapOf(
-            "Marat" to setOf("Mikhail", "Sveta"),
-            "Sveta" to setOf("Marat", "Mikhail"),
-            "Mikhail" to setOf("Sveta", "Marat"),
-            "Friend" to setOf("GoodGnome"),
-            "EvilGnome" to setOf(),
-            "GoodGnome" to setOf()
-        ),
-        propagateHandshakes(
-            mapOf(
-                "Marat" to setOf("Mikhail", "Sveta"),
-                "Sveta" to setOf("Marat"),
-                "Mikhail" to setOf("Sveta"),
-                "Friend" to setOf("GoodGnome"),
-                "EvilGnome" to setOf()
-            )
-        )
-    )
     println("ENDED")
 }
 

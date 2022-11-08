@@ -255,16 +255,16 @@ fun sin(x: Double, eps: Double): Double {
     var sum = 0.0
     // параметры синуса
     var fact = 1.0
-    var pow = theta
+    var exp = theta
     var i = 2
     //
     var term: Double
     do {
-        term = pow / fact
+        term = exp / fact
         sum += (sign * term)
         sign *= -1.0
         fact *= i * (i + 1)
-        pow *= theta * theta
+        exp *= (theta * theta)
         i += 2
     } while (term > eps)
     return sum
@@ -278,26 +278,7 @@ fun sin(x: Double, eps: Double): Double {
  * Подумайте, как добиться более быстрой сходимости ряда при больших значениях x.
  * Использовать kotlin.math.cos и другие стандартные реализации функции косинуса в этой задаче запрещается.
  */
-fun cos(x: Double, eps: Double): Double {
-    val theta = abs(x) % (2 * Math.PI) // нормализации
-    var sign = if (x >= 0) 1.0 else -1.0
-    var sum = 0.0
-    // параметры косинуса
-    var fact = 1.0
-    var pow = 1.0
-    var i = 1
-    //
-    var term: Double
-    do {
-        term = pow / fact
-        sum += (sign * term)
-        sign *= -1.0
-        fact *= i * (i + 1)
-        pow *= theta * theta
-        i += 2
-    } while (term > eps)
-    return sum
-}
+fun cos(x: Double, eps: Double): Double = lesson3.task1.sin(x + Math.PI / 2, eps) // зто моя функция
 
 /**
  * Сложная (4 балла)
