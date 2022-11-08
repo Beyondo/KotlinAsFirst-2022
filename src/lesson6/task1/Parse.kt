@@ -278,6 +278,7 @@ fun mostExpensive(description: String): String {
  * Вернуть -1, если roman не является корректным римским числом
  */
 fun fromRoman(roman: String): Int {
+    if(roman.isEmpty()) return -1
     var result = 0
     var last = 0
     for (c in roman) {
