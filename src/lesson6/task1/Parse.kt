@@ -344,77 +344,96 @@ fun fromRoman(roman: String): Int {
  * IllegalArgumentException должен бросаться даже если ошибочная команда не была достигнута в ходе выполнения.
  *
  */
+// Must pass these assertions:
+// assertEquals(listOf(-1, -1, -1, -1, -1, 0, 0, 0, 0, 0), computeDeviceCells(10, "<-<-<-<-<-", 10000))
+// assertEquals(listOf(1, 1, 1, 1, 1, 0, 0, 0, 0, 0), computeDeviceCells(10, "- <<<<< +[>+]", 10000))
+// assertThrows(IllegalArgumentException::class.java) { computeDeviceCells(10, "===", 3) }
+// assertThrows(IllegalArgumentException::class.java) { computeDeviceCells(10, "+>+>[+>", 3) }
+// assertThrows(IllegalStateException::class.java) { computeDeviceCells(20, ">>>>>>>>>>>>>", 12) }
 fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
     val result = mutableListOf<Int>()
     for (i in 0 until cells) {
         result.add(0)
     }
-    var i = cells / 2
-    var j = 0
-    var k = 0
-    var l = 0
-    while (j < commands.length && k < limit) {
-        when (commands[j]) {
+    var position = cells / 2
+    var count = 0
+    var i = 0
+    while (i < commands.length && count < limit) {
+        when (commands[i]) {
             '+' -> {
-                result[i]++
-                j++
-                k++
+                result[position]++
+                count++
             }
 
             '-' -> {
-                result[i]--
-                j++
-                k++
+                result[position]--
+                count++
             }
 
             '>' -> {
-                i++
-                j++
-                k++
+                position++
+                count++
             }
 
             '<' -> {
-                i--
-                j++
-                k++
+                position--
+                count++
             }
 
             '[' -> {
-                if (result[i] == 0) {
-                    l = 1
-                    while (l != 0) {
+                if (result[position] == 0) {
+                    var j = i
+                    var k = 0
+                    while (j < commands.length) {
+                        if (commands[j] == '[') {
+                            k++
+                        }
+                        if (commands[j] == ']') {
+                            k--
+                        }
+                        if (k == 0) {
+                            i = j
+                            break
+                        }
                         j++
-                        if (j >= commands.length) throw IllegalArgumentException()
-                        if (commands[j] == '[') l++
-                        if (commands[j] == ']') l--
                     }
                 }
-                j++
-                k++
+                count++
             }
 
             ']' -> {
-                if (result[i] != 0) {
-                    l = 1
-                    while (l != 0) {
+                if (result[position] != 0) {
+                    var j = i
+                    var k = 0
+                    while (j >= 0) {
+                        if (commands[j] == ']') {
+                            k++
+                        }
+                        if (commands[j] == '[') {
+                            k--
+                        }
+                        if (k == 0) {
+                            i = j
+                            break
+                        }
                         j--
-                        if (j < 0) throw IllegalArgumentException()
-                        if (commands[j] == ']') l++
-                        if (commands[j] == '[') l--
                     }
                 }
-                j++
-                k++
+                count++
             }
 
             ' ' -> {
-                j++
-                k++
+                count++
             }
 
-            else -> throw IllegalArgumentException()
+            else -> {
+                throw IllegalArgumentException()
+            }
         }
-        if (i < 0 || i >= cells) throw IllegalStateException()
+        i++
+        if (position < 0 || position >= cells) {
+            throw IllegalStateException()
+        }
     }
     return result
 }
