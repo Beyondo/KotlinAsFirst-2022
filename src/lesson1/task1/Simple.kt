@@ -9,8 +9,10 @@ import lesson3.task1.*
 import lesson4.task1.*
 import lesson5.task1.*
 import lesson6.task1.*
+import lesson7.task1.*
 import org.junit.Assert.assertArrayEquals
 import org.junit.Assert.assertNotEquals
+import java.io.File
 
 import kotlin.math.*
 
@@ -61,19 +63,111 @@ fun quadraticRootProduct(a: Double, b: Double, c: Double): Double {
 
 /**
  * Пример главной функции
- */
+ */ private fun checkHtmlListsExample() {
+    val result = File("temp.html").readText().replace(Regex("[\\s\\n\\t]"), "")
+    val expected =
+        """
+                    <html>
+                      <body>
+                        <p>
+                          <ul>
+                            <li>Утка по-пекински
+                              <ul>
+                                <li>Утка</li>
+                                <li>Соус</li>
+                              </ul>
+                            </li>
+                            <li>Салат Оливье
+                              <ol>
+                                <li>Мясо
+                                  <ul>
+                                    <li>Или колбаса</li>
+                                  </ul>
+                                </li>
+                                <li>Майонез</li>
+                                <li>Картофель</li>
+                                <li>Что-то там ещё</li>
+                              </ol>
+                            </li>
+                            <li>Помидоры</li>
+                            <li>Фрукты
+                              <ol>
+                                <li>Бананы</li>
+                                <li>Яблоки
+                                  <ol>
+                                    <li>Красные</li>
+                                    <li>Зелёные</li>
+                                  </ol>
+                                </li>
+                              </ol>
+                            </li>
+                          </ul>
+                        </p>
+                      </body>
+                    </html>
+                    """.trimIndent().replace(Regex("[\\s\\n\\t]"), "")
+    assertEquals(expected, result)
+
+    File("temp.html").delete()
+}
+
 fun main() {
     println("STARTED")
-    assertEquals("+79211234567", flattenPhoneNumber("+7 (921) 123-45-67"))
-    assertEquals("123456798", flattenPhoneNumber("12 --  34- 5 -- 67 -98"))
-    assertEquals("+12345", flattenPhoneNumber("+12 (3) 4-5"))
-    assertEquals("", flattenPhoneNumber("+12 () 4-5"))
-    assertEquals("+425667", flattenPhoneNumber("+42 56 -- 67"))
-    assertEquals("+42566789", flattenPhoneNumber("+42(56 -- 67)89"))
-    assertEquals("", flattenPhoneNumber("ab-123"))
-    assertEquals("", flattenPhoneNumber("134_+874"))
-    assertEquals("1", flattenPhoneNumber("1"))
+    fun test(lhv: Int, rhv: Int, res: String) {
+        printMultiplicationProcess(lhv, rhv, "temp.txt")
+        assertFileContent("temp.txt", res.trimIndent())
+        File("temp.txt").delete()
+    }
+
+    test(
+        19935,
+        111,
+        """
+                19935
+             *    111
+             --------
+                19935
+             + 19935
+             +19935
+             --------
+              2212785
+             """
+    )
+
+    test(
+        12345,
+        76,
+        """
+               12345
+             *    76
+             -------
+               74070
+             +86415
+             -------
+              938220
+             """
+    )
+
+    test(
+        12345,
+        6,
+        """
+              12345
+             *    6
+             ------
+              74070
+             ------
+              74070
+             """
+    )
+
     println("ENDED")
+}
+
+fun assertFileContent(filePath: String, expected: String) {
+    val file = File(filePath)
+    val content = file.readLines().joinToString("\n")
+    assertEquals(expected, content)
 }
 
 /**
