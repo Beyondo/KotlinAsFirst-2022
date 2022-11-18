@@ -193,6 +193,7 @@ fun factorize(n: Int): List<Int> {
         }
         i += if (i == 2) 1 else 2
     }
+    return result
 }
 
 /**
