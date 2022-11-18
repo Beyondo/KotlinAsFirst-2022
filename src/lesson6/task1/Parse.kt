@@ -197,6 +197,7 @@ fun bestHighJump(jumps: String): Int {
     }
     return maxJump
 }
+
 /**
  * Сложная (6 баллов)
  *
@@ -207,16 +208,20 @@ fun bestHighJump(jumps: String): Int {
  * Про нарушении формата входной строки бросить исключение IllegalArgumentException
  */
 fun plusMinus(expression: String): Int {
-    val expressionList = expression.split(" ")
-    var result = 0
-    if (expressionList.size % 2 == 0) throw IllegalArgumentException()
-    for (i in 0 until expressionList.size step 2) {
-        if (expressionList[i].toIntOrNull() == null) throw IllegalArgumentException()
-        if (i == 0) result = expressionList[i].toInt()
-        if (i != 0) {
-            if (expressionList[i - 1] == "+") result += expressionList[i].toInt()
-            if (expressionList[i - 1] == "-") result -= expressionList[i].toInt()
+    var tokens = mutableListOf<String>()
+    expression.split(" ").forEach { token ->
+        if (token == "+" || token == "-") {
+            tokens.add(token)
+        } else {
+            tokens.addAll(token.split(Regex("""(?=[+-])""")))
         }
+    }
+    if (tokens.size == 1) return tokens[0].toInt()
+    else if (tokens.size % 2 == 0) throw IllegalArgumentException()
+    var result = tokens[0].toInt()
+    for (i in 1 until tokens.size step 2) {
+        if (tokens[i] == "+") result += tokens[i + 1].toInt()
+        else result -= tokens[i + 1].toInt()
     }
     return result
 }
