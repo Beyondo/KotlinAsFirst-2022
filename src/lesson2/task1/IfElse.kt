@@ -72,10 +72,11 @@ fun minBiRoot(a: Double, b: Double, c: Double): Double {
  */
 fun ageDescription(age: Int): String {
     // последняя цифра
-    val desc =
-        if (age % 10 == 1 && age % 100 != 11) "год"
-        else if (age % 10 in 2..4 && (age % 100 < 10 || age % 100 >= 20)) "года"
-        else "лет"
+    val desc = when {
+        age % 10 == 1 && age % 100 != 11 -> "год"
+        age % 10 in 2..4 && (age % 100 < 10 || age % 100 >= 20) -> "года"
+        else -> "лет"
+    }
     return "$age $desc"
 }
 
@@ -95,7 +96,11 @@ fun timeForHalfWay(
     val s2 = t2 * v2
     val s3 = t3 * v3
     val s = (s1 + s2 + s3) / 2
-    return if (s <= s1) s / v1 else if (s <= s1 + s2) t1 + (s - s1) / v2 else t1 + t2 + ((s - s1 - s2) / v3)
+    return when {
+        s <= s1 -> s / v1
+        s <= s1 + s2 -> t1 + (s - s1) / v2
+        else -> t1 + t2 + ((s - s1 - s2) / v3)
+    }
 }
 
 /**
@@ -162,9 +167,6 @@ fun triangleKind(a: Double, b: Double, c: Double): Int {
  * Если пересечения нет, вернуть -1.
  */
 fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int {
-    var A = a; var B = b; var C = c; var D = d
-    if (A > B) A = B.also { B = A }
-    if (C > D) C = D.also { D = C }
-    if (A > D || B < C) return -1
-    return min(B, D) - max(A, C)
+    val segments = arrayOf(a, b, c, d).sorted()
+    return if (segments[1] < segments[2]) -1 else segments[2] - segments[1]
 }

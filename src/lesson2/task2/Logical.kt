@@ -22,10 +22,10 @@ fun pointInsideCircle(x: Double, y: Double, x0: Double, y0: Double, r: Double) =
  * Определить, счастливое ли заданное число, вернуть true, если это так.
  */
 fun isNumberHappy(number: Int): Boolean {
-    val a: Int = number / 1000
-    val b: Int = number / 100 % 10
-    val c: Int = number / 10 % 10
-    val d: Int = number % 10
+    val a = number / 1000
+    val b = number / 100 % 10
+    val c = number / 10 % 10
+    val d = number % 10
     return a + b == c + d
 }
 
@@ -36,7 +36,8 @@ fun isNumberHappy(number: Int): Boolean {
  * Определить, угрожают ли они друг другу. Вернуть true, если угрожают.
  * Считать, что ферзи не могут загораживать друг друга.
  */
-fun queenThreatens(x1: Int, y1: Int, x2: Int, y2: Int): Boolean = x1 == x2 || y1 == y2 || abs(x1 - x2) == abs(y1 - y2)
+fun queenThreatens(x1: Int, y1: Int, x2: Int, y2: Int): Boolean =
+    x1 == x2 || y1 == y2 || abs(x1 - x2) == abs(y1 - y2)
 
 
 /**
@@ -45,19 +46,11 @@ fun queenThreatens(x1: Int, y1: Int, x2: Int, y2: Int): Boolean = x1 == x2 || y1
  * Дан номер месяца (от 1 до 12 включительно) и год (положительный).
  * Вернуть число дней в этом месяце этого года по григорианскому календарю.
  */
-fun daysInMonth(month: Int, year: Int): Int {
-    return if (month == 2) {
-        if (year % 4 == 0 && (year % 100 != 0 || year % 400 == 0))
-            29
-        else
-            28
-    } else if (month == 4 || month == 6 || month == 9 || month == 11) {
-        30
-    } else {
-        31
-    }
+fun daysInMonth(month: Int, year: Int): Int = when (month) {
+    2 -> if (year % 4 == 0 && (year % 100 != 0 || year % 400 == 0)) 29 else 28
+    4, 6, 9, 11 -> 30
+    else -> 31
 }
-
 /**
  * Простая (2 балла)
  *

@@ -138,14 +138,7 @@ fun mean(list: List<Double>): Double = if (list.isEmpty()) 0.0 else list.sum() /
  *
  * Обратите внимание, что данная функция должна изменять содержание списка list, а не его копии.
  */
-fun center(list: MutableList<Double>): MutableList<Double> {
-    if (list.isEmpty()) return list
-    val mean = mean(list)
-    for (i in list.indices) {
-        list[i] -= mean
-    }
-    return list
-}
+fun center(list: MutableList<Double>): MutableList<Double> = list.map { it - mean(list) }.toMutableList()
 
 /**
  * Средняя (3 балла)
@@ -198,9 +191,8 @@ fun factorize(n: Int): List<Int> {
             result.add(i)
             number /= i
         }
-        i++
+        i += if (i == 2) 1 else 2
     }
-    return result
 }
 
 /**
@@ -256,7 +248,8 @@ fun decimal(digits: List<Int>, base: Int): Int = digits.fold(0) { acc, i -> acc 
  * Использовать функции стандартной библиотеки, напрямую и полностью решающие данную задачу
  * (например, str.toInt(base)), запрещается.
  */
-fun decimalFromString(str: String, base: Int): Int = decimal(str.map { if (it in '0'..'9') it - '0' else it - 'a' + 10 }, base)
+fun decimalFromString(str: String, base: Int): Int =
+    decimal(str.map { if (it in '0'..'9') it - '0' else it - 'a' + 10 }, base)
 
 /**
  * Сложная (5 баллов)

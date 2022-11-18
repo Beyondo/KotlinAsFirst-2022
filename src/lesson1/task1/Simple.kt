@@ -63,54 +63,7 @@ fun quadraticRootProduct(a: Double, b: Double, c: Double): Double {
 
 /**
  * Пример главной функции
- */ private fun checkHtmlListsExample() {
-    val result = File("temp.html").readText().replace(Regex("[\\s\\n\\t]"), "")
-    val expected =
-        """
-                    <html>
-                      <body>
-                        <p>
-                          <ul>
-                            <li>Утка по-пекински
-                              <ul>
-                                <li>Утка</li>
-                                <li>Соус</li>
-                              </ul>
-                            </li>
-                            <li>Салат Оливье
-                              <ol>
-                                <li>Мясо
-                                  <ul>
-                                    <li>Или колбаса</li>
-                                  </ul>
-                                </li>
-                                <li>Майонез</li>
-                                <li>Картофель</li>
-                                <li>Что-то там ещё</li>
-                              </ol>
-                            </li>
-                            <li>Помидоры</li>
-                            <li>Фрукты
-                              <ol>
-                                <li>Бананы</li>
-                                <li>Яблоки
-                                  <ol>
-                                    <li>Красные</li>
-                                    <li>Зелёные</li>
-                                  </ol>
-                                </li>
-                              </ol>
-                            </li>
-                          </ul>
-                        </p>
-                      </body>
-                    </html>
-                    """.trimIndent().replace(Regex("[\\s\\n\\t]"), "")
-    assertEquals(expected, result)
-
-    File("temp.html").delete()
-}
-
+ */
 fun main() {
     println("STARTED")
     fun test(lhv: Int, rhv: Int, res: String) {

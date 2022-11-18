@@ -16,9 +16,8 @@ import kotlin.math.*
  */
 fun factorial(n: Int): Double {
     var result = 1.0
-    for (i in 1..n) {
-        result = result * i // Please do not fix in master
-    }
+    for (i in 1..n)
+        result *= i
     return result
 }
 
@@ -89,10 +88,9 @@ fun digitNumber(n: Int): Int {
  * Ряд Фибоначчи определён следующим образом: fib(1) = 1, fib(2) = 1, fib(n+2) = fib(n) + fib(n+1)
  */
 fun fib(n: Int): Int {
-    var N = n
     var a = 0
     var b = 1
-    while (N-- > 1) {
+    for (i in 2..n) {
         val x = a
         a = b
         b += x
@@ -118,13 +116,9 @@ fun minDivisor(n: Int): Int {
  * Для заданного числа n > 1 найти максимальный делитель, меньший n
  */
 fun maxDivisor(n: Int): Int {
-    if (n % 2 == 0) {
-        for (i in n / 2 downTo 1)
-            if (n % i == 0) return i
-    } else {
-        for (i in n / 3 downTo 1)
-            if (n % i == 0) return i
-    }
+    val limit = sqrt(n.toDouble()).toInt()
+    for (i in limit downTo 2)
+        if (n % i == 0) return n / i
     return 1
 }
 
@@ -161,11 +155,12 @@ fun collatzSteps(x: Int): Int {
  * минимальное число k, которое делится и на m и на n без остатка
  */
 fun lcm(m: Int, n: Int): Int {
-    var k = m
-    while (k % n != 0) k += m
-    return k
+    // Fewest possible operations
+    var a = m
+    var b = n
+    while (a != b) if (a > b) a -= b else b -= a
+    return m * n / a
 }
-
 /**
  * Средняя (3 балла)
  *
@@ -211,15 +206,7 @@ fun revert(n: Int): Int {
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun isPalindrome(n: Int): Boolean {
-    var rev = 0
-    var N = n
-    while (N > 0) {
-        rev = rev * 10 + N % 10
-        N /= 10
-    }
-    return n == rev
-}
+fun isPalindrome(n: Int): Boolean = n == revert(n)
 
 /**
  * Средняя (3 балла)
