@@ -350,16 +350,22 @@ fun hasAnagrams(words: List<String>): Boolean {
  *        )
  */
 fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<String>> {
-    val result = friends.keys.union(friends.values.flatten()).associateWith { mutableSetOf<String>() }.toMutableMap()
-    for ((key, values) in friends) {
-        result[key] = values.toMutableSet()
-        for (person in values) {
-            if (person in friends) {
-                result[key]!!.addAll(friends[person]!!.filterNot { it == key })
+    fun getAcquainted(person: String): Set<String> {
+        val result = mutableSetOf<String>()
+        val queue = ArrayDeque<String>()
+        queue.add(person)
+        while (queue.isNotEmpty()) {
+            val current = queue.removeFirst()
+            friends[current]?.forEach {
+                if (it !in result) {
+                    result.add(it)
+                    queue.add(it)
+                }
             }
         }
+        return result - person
     }
-    return result
+    return friends.keys.union(friends.values.flatten()).associateWith { getAcquainted(it) }
 }
 
 /**

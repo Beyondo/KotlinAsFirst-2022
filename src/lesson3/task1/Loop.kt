@@ -116,9 +116,13 @@ fun minDivisor(n: Int): Int {
  * Для заданного числа n > 1 найти максимальный делитель, меньший n
  */
 fun maxDivisor(n: Int): Int {
-    val limit = sqrt(n.toDouble()).toInt()
-    for (i in limit downTo 2)
-        if (n % i == 0) return n / i
+    if (n % 2 == 0) {
+        for (i in n / 2 downTo 2)
+            if (n % i == 0) return i
+    } else {
+        for (i in n / 3 downTo 2)
+            if (n % i == 0) return i
+    }
     return 1
 }
 

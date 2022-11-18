@@ -167,6 +167,9 @@ fun triangleKind(a: Double, b: Double, c: Double): Int {
  * Если пересечения нет, вернуть -1.
  */
 fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int {
-    val segments = arrayOf(a, b, c, d).sorted()
-    return if (segments[1] < segments[2]) -1 else segments[2] - segments[1]
+    var s = intArrayOf(a, b, c, d)
+    if (s[0] > s[1]) s[0] = s[1].also { s[1] = s[0] }
+    if (s[2] > s[3]) s[2] = s[3].also { s[3] = s[2] }
+    if (s[0] > s[3] || s[1] < s[2]) return -1
+    return min(s[1], s[3]) - max(s[0], s[2])
 }

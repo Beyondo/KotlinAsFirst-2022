@@ -138,7 +138,12 @@ fun mean(list: List<Double>): Double = if (list.isEmpty()) 0.0 else list.sum() /
  *
  * Обратите внимание, что данная функция должна изменять содержание списка list, а не его копии.
  */
-fun center(list: MutableList<Double>): MutableList<Double> = list.map { it - mean(list) }.toMutableList()
+fun center(list: MutableList<Double>): MutableList<Double> {
+    val mean = mean(list)
+    for (i in list.indices)
+        list[i] -= mean
+    return list
+}
 
 /**
  * Средняя (3 балла)
