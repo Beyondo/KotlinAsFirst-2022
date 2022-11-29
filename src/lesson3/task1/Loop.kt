@@ -178,13 +178,13 @@ fun isCoPrime(m: Int, n: Int): Boolean = lcm(m, n) == m * n
  * Использовать операции со строками в этой задаче запрещается.
  */
 fun revert(n: Int): Int {
-    var res = 0
-    var N = n
-    while (N > 0) {
-        res = res * 10 + N % 10
-        N /= 10
+    var x = n
+    var result = 0
+    while (x > 0) {
+        result = result * 10 + x % 10
+        x /= 10
     }
-    return res
+    return result
 }
 
 /**
