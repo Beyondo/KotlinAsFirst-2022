@@ -218,7 +218,8 @@ fun factorizeToString(n: Int): String = factorize(n).joinToString("*")
  * Результат перевода вернуть в виде списка цифр в base-ичной системе от старшей к младшей,
  * например: n = 100, base = 4 -> (1, 2, 1, 0) или n = 250, base = 14 -> (1, 3, 12)
  */
-fun convert(n: Int, base: Int): List<Int> = if (n < base) listOf(n) else convert(n / base, base) + listOf(n % base)
+fun convert(n: Int, base: Int): List<Int> =
+    if (n < base) listOf(n) else convert(n / base, base) + listOf(n % base)
 
 /**
  * Сложная (4 балла)
@@ -270,14 +271,14 @@ fun roman(n: Int): String {
     val roman = listOf("M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I")
     val arabic = listOf(1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1)
     var number = n
-    var result = ""
-    for (i in 0 until roman.size) {
-        while (number >= arabic[i]) {
-            result += roman[i]
-            number -= arabic[i]
+    return buildString {
+        for (i in roman.indices) {
+            while (number >= arabic[i]) {
+                append(roman[i])
+                number -= arabic[i]
+            }
         }
     }
-    return result
 }
 /**
  * Очень сложная (7 баллов)
