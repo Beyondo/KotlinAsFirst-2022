@@ -142,9 +142,15 @@ fun rookOrBishopThreatens(
     rookX: Int, rookY: Int,
     bishopX: Int, bishopY: Int
 ): Int {
-    val rook = kingX == rookX || kingY == rookY
-    val bishop = abs(kingX - bishopX) == abs(kingY - bishopY)
-    return if (rook && bishop) 3 else if (bishop) 2 else if (rook) 1 else 0
+
+    val rookThreatens = kingX == rookX || kingY == rookY
+    val bishopThreatens = abs(kingX - bishopX) == abs(kingY - bishopY)
+    return when {
+        rookThreatens && bishopThreatens -> 3
+        bishopThreatens -> 2
+        rookThreatens -> 1
+        else -> 0
+    }
 }
 
 /**
@@ -160,7 +166,11 @@ fun triangleKind(a: Double, b: Double, c: Double): Int {
     val sides = arrayOf(a, b, c).sorted()
     val left = (sides[0] * sides[0]) + (sides[1] * sides[1])
     val right = sides[2] * sides[2]
-    return if (left < right) 2 else if (left > right) 0 else 1
+    return when {
+        left < right -> 2
+        left > right -> 0
+        else -> 1
+    }
 }
 
 /**

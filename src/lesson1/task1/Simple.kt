@@ -64,6 +64,11 @@ fun quadraticRootProduct(a: Double, b: Double, c: Double): Double {
  */
 fun main() {
     println("STARTED")
+
+    assertEquals(listOf(2), factorize(2))
+    assertEquals(listOf(2, 2, 3, 3, 23687), factorize(852732))
+    assertEquals(listOf(3, 5, 5), factorize(75))
+    assertEquals(listOf(2, 3, 3, 19), factorize(342))
     println("ENDED")
 }
 
