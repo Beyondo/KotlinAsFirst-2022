@@ -117,7 +117,7 @@ fun minDivisor(n: Int): Int {
  */
 fun maxDivisor(n: Int): Int {
     val limit = sqrt(n.toDouble()).toInt()
-    for (i in limit downTo 2)
+    for (i in 2..limit)
         if (n % i == 0) return n / i
     return 1
 }
