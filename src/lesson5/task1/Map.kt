@@ -208,8 +208,6 @@ fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Doub
     val result = mutableMapOf<String, Double>()
     val count = mutableMapOf<String, Int>()
     for ((key, value) in stockPrices) {
-
-        result[key] = value + (result[key] ?: 0.0)
         if (result[key] == null) {
             count[key] = 1
         } else {
