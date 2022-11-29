@@ -64,22 +64,15 @@ fun quadraticRootProduct(a: Double, b: Double, c: Double): Double {
  */
 fun main() {
     println("STARTED")
-    assertEquals(
-        mapOf<String, Double>(),
-        averageStockPrice(listOf())
-    )
-    assertEquals(
-        mapOf("MSFT" to 100.0, "NFLX" to 40.0),
-        averageStockPrice(listOf("MSFT" to 100.0, "NFLX" to 40.0))
-    )
-    assertEquals(
-        mapOf("MSFT" to 150.0, "NFLX" to 40.0),
-        averageStockPrice(listOf("MSFT" to 100.0, "MSFT" to 200.0, "NFLX" to 40.0))
-    )
-    assertEquals(
-        mapOf("MSFT" to 150.0, "NFLX" to 45.0),
-        averageStockPrice(listOf("MSFT" to 100.0, "MSFT" to 200.0, "NFLX" to 40.0, "NFLX" to 50.0))
-    )
+    assertEquals(1, maxDivisor(17))
+    assertEquals(12, maxDivisor(24))
+    assertEquals(59, maxDivisor(177))
+    assertEquals(17, maxDivisor(34))
+    assertEquals(7, maxDivisor(49))
+    assertEquals(509, maxDivisor(8653))
+    assertEquals(1, maxDivisor(2124679))
+    assertEquals(1, maxDivisor(1073676287))
+    assertEquals(1, maxDivisor(Int.MAX_VALUE))
     println("ENDED")
 }
 
