@@ -143,10 +143,10 @@ fun maxDivisor(n: Int): Int {
  * этого для какого-либо начального X > 0.
  */
 fun collatzSteps(x: Int): Int {
-    var X = x
+    var n = x
     var steps = 0
-    while (X != 1) {
-        X = if (X % 2 == 0) X / 2 else (3 * X) + 1
+    while (n != 1) {
+        if (n % 2 == 0) n /= 2 else n = (3 * n) + 1
         steps++
     }
     return steps
@@ -172,17 +172,7 @@ fun lcm(m: Int, n: Int): Int {
  * Взаимно простые числа не имеют общих делителей, кроме 1.
  * Например, 25 и 49 взаимно простые, а 6 и 8 -- нет.
  */
-fun isCoPrime(m: Int, n: Int): Boolean {
-    var temp: Int
-    var M = m
-    var N = n
-    while (N != 0) {
-        temp = M % N
-        M = N
-        N = temp
-    }
-    return M == 1
-}
+fun isCoPrime(m: Int, n: Int): Boolean = lcm(m, n) == m * n
 
 /**
  * Средняя (3 балла)

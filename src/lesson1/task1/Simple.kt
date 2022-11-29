@@ -10,8 +10,6 @@ import lesson4.task1.*
 import lesson5.task1.*
 import lesson6.task1.*
 import lesson7.task1.*
-import org.junit.Assert.assertArrayEquals
-import org.junit.Assert.assertNotEquals
 import java.io.File
 
 import kotlin.math.*
@@ -66,54 +64,6 @@ fun quadraticRootProduct(a: Double, b: Double, c: Double): Double {
  */
 fun main() {
     println("STARTED")
-    fun test(lhv: Int, rhv: Int, res: String) {
-        printMultiplicationProcess(lhv, rhv, "temp.txt")
-        assertFileContent("temp.txt", res.trimIndent())
-        File("temp.txt").delete()
-    }
-
-    test(
-        19935,
-        111,
-        """
-                19935
-             *    111
-             --------
-                19935
-             + 19935
-             +19935
-             --------
-              2212785
-             """
-    )
-
-    test(
-        12345,
-        76,
-        """
-               12345
-             *    76
-             -------
-               74070
-             +86415
-             -------
-              938220
-             """
-    )
-
-    test(
-        12345,
-        6,
-        """
-              12345
-             *    6
-             ------
-              74070
-             ------
-              74070
-             """
-    )
-
     println("ENDED")
 }
 
@@ -142,11 +92,11 @@ fun seconds(hours: Int, minutes: Int, seconds: Int): Int = (hours * 3600) + (min
  */
 fun lengthInMeters(sagenes: Int, arshins: Int, vershoks: Int): Double {
     // Взял из википедии: https://en.wikipedia.org/wiki/Obsolete_Russian_units_of_measurement
-    val sagene_meters = 2.1336
-    val arshin_meters = 0.7112
-    val vershok_meters = 0.04445
+    val sageneMeters = 2.1336
+    val arshinMeters = 0.7112
+    val vershokMeters = 0.04445
     // Возврат суммы
-    return (sagenes * sagene_meters) + (arshins * arshin_meters) + (vershoks * vershok_meters)
+    return (sagenes * sageneMeters) + (arshins * arshinMeters) + (vershoks * vershokMeters)
 }
 
 /**
@@ -156,9 +106,9 @@ fun lengthInMeters(sagenes: Int, arshins: Int, vershoks: Int): Double {
  * Вывести значение того же угла в радианах (например, 0.63256).
  */
 fun angleInRadian(deg: Int, min: Int, sec: Int): Double {
-    val minute_degrees = 1.0 / 60.0
-    val second_degrees = 1.0 / 3600.0
-    val degrees = deg + (min * minute_degrees) + (sec * second_degrees)
+    val minuteDegrees = 1.0 / 60.0
+    val secondDegrees = 1.0 / 3600.0
+    val degrees = deg + (min * minuteDegrees) + (sec * secondDegrees)
     return (degrees / 180) * PI // 360/180 = 2, = 2pi
 }
 
@@ -168,7 +118,7 @@ fun angleInRadian(deg: Int, min: Int, sec: Int): Double {
  * Найти длину отрезка, соединяющего точки на плоскости с координатами (x1, y1) и (x2, y2).
  * Например, расстояние между (3, 0) и (0, 4) равно 5
  */
-fun trackLength(x1: Double, y1: Double, x2: Double, y2: Double): Double = sqrt(sqr(x2 - x1 ) + sqr(y2 - y1))
+fun trackLength(x1: Double, y1: Double, x2: Double, y2: Double): Double = sqrt(sqr(x2 - x1) + sqr(y2 - y1))
 
 /**
  * Простая (2 балла)
@@ -196,8 +146,8 @@ fun travelMinutes(hoursDepart: Int, minutesDepart: Int, hoursArrive: Int, minute
  */
 fun accountInThreeYears(initial: Int, percent: Int): Double
 {
-    val yearly_growth = (percent * 0.01) + 1
-    return initial * yearly_growth.pow(3.0)
+    val yearlyGrowth = (percent * 0.01) + 1
+    return initial * yearlyGrowth.pow(3.0)
 }
 
 /**

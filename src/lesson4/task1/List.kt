@@ -3,6 +3,7 @@
 package lesson4.task1
 
 import lesson1.task1.discriminant
+import lesson3.task1.minDivisor
 import kotlin.math.pow
 import kotlin.math.sqrt
 
@@ -162,7 +163,8 @@ fun times(a: List<Int>, b: List<Int>): Int = a.zip(b).sumOf { it.first * it.seco
  * Коэффициенты многочлена заданы списком p: (p0, p1, p2, p3, ..., pN).
  * Значение пустого многочлена равно 0 при любом x.
  */
-fun polynom(p: List<Int>, x: Int): Int = p.foldIndexed(0) { index, acc, i -> acc + i * x.toDouble().pow(index).toInt() }
+fun polynom(p: List<Int>, x: Int): Int =
+    p.foldIndexed(0){ index, acc, i -> acc + i * x.toDouble().pow(index).toInt() }
 
 /**
  * Средняя (3 балла)
@@ -190,13 +192,10 @@ fun accumulate(list: MutableList<Int>): MutableList<Int> {
 fun factorize(n: Int): List<Int> {
     val result = mutableListOf<Int>()
     var number = n
-    var i = 2
     while (number > 1) {
-        while (number % i == 0) {
-            result.add(i)
-            number /= i
-        }
-        i += if (i == 2) 1 else 2
+        val minDiv = minDivisor(number)
+        result.add(minDiv)
+        number /= minDiv
     }
     return result
 }
