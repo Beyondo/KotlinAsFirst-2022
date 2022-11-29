@@ -64,11 +64,22 @@ fun quadraticRootProduct(a: Double, b: Double, c: Double): Double {
  */
 fun main() {
     println("STARTED")
-
-    assertEquals(listOf(2), factorize(2))
-    assertEquals(listOf(2, 2, 3, 3, 23687), factorize(852732))
-    assertEquals(listOf(3, 5, 5), factorize(75))
-    assertEquals(listOf(2, 3, 3, 19), factorize(342))
+    assertEquals(
+        mapOf<String, Double>(),
+        averageStockPrice(listOf())
+    )
+    assertEquals(
+        mapOf("MSFT" to 100.0, "NFLX" to 40.0),
+        averageStockPrice(listOf("MSFT" to 100.0, "NFLX" to 40.0))
+    )
+    assertEquals(
+        mapOf("MSFT" to 150.0, "NFLX" to 40.0),
+        averageStockPrice(listOf("MSFT" to 100.0, "MSFT" to 200.0, "NFLX" to 40.0))
+    )
+    assertEquals(
+        mapOf("MSFT" to 150.0, "NFLX" to 45.0),
+        averageStockPrice(listOf("MSFT" to 100.0, "MSFT" to 200.0, "NFLX" to 40.0, "NFLX" to 50.0))
+    )
     println("ENDED")
 }
 
