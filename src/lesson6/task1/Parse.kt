@@ -171,8 +171,8 @@ fun bestLongJump(jumps: String): Int {
     var maxJump = -1
     for (jump in jumpsList) {
         if (jump == "-" || jump == "%") continue
-        if (jump.toIntOrNull() == null) return -1
-        if (jump.toInt() > maxJump) maxJump = jump.toInt()
+        val jumpInt = jump.toIntOrNull() ?: return -1
+        if (jumpInt > maxJump) maxJump = jumpInt
     }
     return maxJump
 }
@@ -191,9 +191,11 @@ fun bestLongJump(jumps: String): Int {
 fun bestHighJump(jumps: String): Int {
     val jumpsList = jumps.split(" ")
     var maxJump = -1
-    for (i in 0 until jumpsList.size step 2) {
-        if (jumpsList[i].toIntOrNull() == null) return -1
-        if (jumpsList[i + 1].contains("+") && jumpsList[i].toInt() > maxJump) maxJump = jumpsList[i].toInt()
+    for (i in jumpsList.indices step 2) {
+        val jump = jumpsList[i].toIntOrNull() ?: return -1
+        val jumpResult = jumpsList[i + 1]
+        if (Regex("""[^0-9\s-+()%]""").containsMatchIn(jumpResult)) return -1
+        if (jumpResult.contains("+") && jump > maxJump) maxJump = jump
     }
     return maxJump
 }
@@ -213,7 +215,8 @@ fun plusMinus(expression: String): Int {
         if (token == "+" || token == "-") {
             tokens.add(token)
         } else {
-            tokens.addAll(token.split(Regex("""(?=[+-])""")))
+            val number = token.toIntOrNull() ?: throw IllegalArgumentException()
+            tokens.add(number.toString())
         }
     }
     if (tokens.size == 1) return tokens[0].toInt()
@@ -239,7 +242,7 @@ fun firstDuplicateIndex(str: String): Int {
     val strList = str.split(" ")
     var index = 0
     for (i in 0 until strList.size - 1) {
-        if (strList[i].lowercase(Locale.getDefault()) == strList[i + 1].lowercase(Locale.getDefault())) return index
+        if (strList[i].lowercase() == strList[i + 1].lowercase()) return index
         index += strList[i].length + 1
     }
     return -1
@@ -261,12 +264,13 @@ fun mostExpensive(description: String): String {
     var maxPrice = 0.0
     var maxPriceName = ""
     for (i in descriptionList) {
-        val price = i.substringAfter(" ")
-        if (price == "" || price.toDouble() < 0) return ""
-        if (price.toDouble() < 0) return ""
-        if (price.toDouble() > maxPrice) {
-            maxPrice = price.toDouble()
-            maxPriceName = i.substringBefore(" ")
+        // check format
+        if (!i.matches(Regex("""[а-яА-ЯёЁa-zA-Z]+ [0-9.]+"""))) return ""
+        val price = i.split(" ")[1].toDoubleOrNull() ?: return ""
+        if (price < 0) return ""
+        if (price > maxPrice) {
+            maxPrice = price
+            maxPriceName = i.split(" ")[0]
         }
     }
     return maxPriceName
@@ -346,89 +350,31 @@ fun fromRoman(roman: String): Int {
  *
  */
 fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
-    val result = mutableListOf<Int>()
-    for (i in 0 until cells) {
-        result.add(0)
-    }
+    val result = MutableList(cells) { 0 }
     var position = cells / 2
     var count = 0
     var i = 0
+    val stack = Stack<Int>()
     while (i < commands.length && count < limit) {
         when (commands[i]) {
-            '+' -> {
-                result[position]++
-                count++
-            }
+            '+' -> result[position]++
+            '-' -> result[position]--
+            '>' -> position++
+            '<' -> position--
+            '[' -> if (result[position] == 0) {
+                var j = i
+                while (commands[j] != ']') j++
+                i = j
+            } else stack.push(i)
 
-            '-' -> {
-                result[position]--
-                count++
-            }
+            ']' -> if (result[position] != 0) i = stack.peek() else stack.pop()
+            ' ' -> {}
 
-            '>' -> {
-                position++
-                count++
-            }
-
-            '<' -> {
-                position--
-                count++
-            }
-
-            '[' -> {
-                if (result[position] == 0) {
-                    var j = i
-                    var k = 0
-                    while (j < commands.length) {
-                        if (commands[j] == '[') {
-                            k++
-                        }
-                        if (commands[j] == ']') {
-                            k--
-                        }
-                        if (k == 0) {
-                            i = j
-                            break
-                        }
-                        j++
-                    }
-                }
-                count++
-            }
-
-            ']' -> {
-                if (result[position] != 0) {
-                    var j = i
-                    var k = 0
-                    while (j >= 0) {
-                        if (commands[j] == ']') {
-                            k++
-                        }
-                        if (commands[j] == '[') {
-                            k--
-                        }
-                        if (k == 0) {
-                            i = j
-                            break
-                        }
-                        j--
-                    }
-                }
-                count++
-            }
-
-            ' ' -> {
-                count++
-            }
-
-            else -> {
-                throw IllegalArgumentException()
-            }
+            else -> throw IllegalArgumentException()
         }
+        if (position < 0 || position >= cells) throw IllegalStateException()
         i++
-        if (position < 0 || position >= cells) {
-            throw IllegalStateException()
-        }
+        count++
     }
     return result
 }
