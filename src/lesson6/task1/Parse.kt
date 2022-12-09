@@ -266,13 +266,13 @@ fun mostExpensive(description: String): String {
     var maxPrice = 0.0
     var maxPriceName = ""
     for (i in descriptionList) {
-        // check format
-        if (!i.matches(Regex("""[а-яА-ЯёЁa-zA-Z]+ [0-9.]+"""))) return ""
-        val price = i.split(" ")[1].toDoubleOrNull() ?: return ""
-        if (price < 0) return ""
-        if (price > maxPrice) {
+        val namePricePair = i.split(" ")
+        if (namePricePair.size != 2) return ""
+        val name = namePricePair[0]
+        val price = namePricePair[1].toDouble()
+        if (price >= maxPrice) {
             maxPrice = price
-            maxPriceName = i.split(" ")[0]
+            maxPriceName = name
         }
     }
     return maxPriceName
@@ -352,34 +352,40 @@ fun fromRoman(roman: String): Int {
  *
  */
 fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
-    if (commands.count { it == '[' } != commands.count { it == ']' })
-        throw IllegalArgumentException()
-    if (commands.any { it !in "+-><[] " }) throw IllegalArgumentException()
+    if (commands.count { it == '[' } != commands.count { it == ']' }
+        || commands.any { it !in "+-<>[] " }) throw IllegalArgumentException()
     val result = MutableList(cells) { 0 }
-    var position = cells / 2
-    var count = 0
-    var i = 0
-    val stack = Stack<Int>()
-    stack.add(0)
-    while (i < commands.length && count < limit) {
+    if (commands.isEmpty()) return result
+    var (i, position, count, j) = listOf(0, (cells / 2.0).toInt(), 1, 0)
+    do {
         when (commands[i]) {
             '+' -> result[position]++
             '-' -> result[position]--
             '>' -> position++
             '<' -> position--
             '[' -> if (result[position] == 0) {
-                var j = i
-                while (commands[j] != ']') j++
-                i = j
-            } else stack.push(i)
+                ++j
+                while (j > 0) {
+                    when (commands[++i]) {
+                        '[' -> j++
+                        ']' -> j--
+                    }
+                }
+            }
 
-            ']' -> if (result[position] != 0) i = stack.peek() else stack.pop()
-            ' ' -> {}
-            else -> throw IllegalArgumentException()
+            ']' -> if (result[position] != 0) {
+                j = 1
+                while (j > 0) {
+                    when (commands[--i]) {
+                        '[' -> j--
+                        ']' -> j++
+                    }
+                }
+                --i
+                --count
+            }
         }
-        if (position < 0 || position >= cells) throw IllegalStateException()
-        i++
-        count++
-    }
+        if (position !in 0 until cells) throw IllegalStateException()
+    } while (limit >= ++count && ++i < commands.length)
     return result
 }
