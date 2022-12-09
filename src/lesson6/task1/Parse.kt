@@ -360,6 +360,7 @@ fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
     var count = 0
     var i = 0
     val stack = Stack<Int>()
+    stack.add(0)
     while (i < commands.length && count < limit) {
         when (commands[i]) {
             '+' -> result[position]++
@@ -372,11 +373,8 @@ fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
                 i = j
             } else stack.push(i)
 
-            ']' -> if (result[position] != 0) i = stack.peek()
-            else if (stack.isNotEmpty()) stack.pop()
-
+            ']' -> if (result[position] != 0) i = stack.peek() else stack.pop()
             ' ' -> {}
-
             else -> throw IllegalArgumentException()
         }
         if (position < 0 || position >= cells) throw IllegalStateException()
