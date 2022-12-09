@@ -350,6 +350,9 @@ fun fromRoman(roman: String): Int {
  *
  */
 fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
+    if (commands.count { it == '[' } != commands.count { it == ']' })
+        throw IllegalArgumentException()
+    if (commands.any { it !in "+-><[] " }) throw IllegalArgumentException()
     val result = MutableList(cells) { 0 }
     var position = cells / 2
     var count = 0
