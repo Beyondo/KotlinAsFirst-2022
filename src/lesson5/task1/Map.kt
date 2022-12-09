@@ -2,6 +2,8 @@
 
 package lesson5.task1
 
+import java.lang.Math.max
+
 // Урок 5: ассоциативные массивы и множества
 // Максимальное количество баллов = 14
 // Рекомендуемое количество баллов = 9
@@ -413,31 +415,30 @@ fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
  *   ) -> emptySet()
  */
 fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<String> {
-    val result = mutableMapOf<Int, MutableMap<Int, MutableSet<String>>>()
-    for (i in 0..treasures.size) {
-        result[i] = mutableMapOf()
-        for (j in 0..capacity) {
-            result[i]!![j] = mutableSetOf()
-        }
-    }
-    for (i in 1..treasures.size) {
+    val n = treasures.size
+    val weights = treasures.values.map { it.first }.toIntArray()
+    val values = treasures.values.map { it.second }.toIntArray()
+    val names = treasures.keys.toList()
+    val dp = Array(n + 1) { IntArray(capacity + 1) }
+    for (i in 1..n) {
         for (j in 1..capacity) {
-            val weight = treasures.toList()[i - 1].second.first
-            val price = treasures.toList()[i - 1].second.second
-            if (weight <= j) {
-                if (result[i - 1]!![j - weight]!!.sumBy { treasures[it]!!.second } + price >
-                    result[i - 1]!![j]!!.sumBy { treasures[it]!!.second }
-                ) {
-                    result[i]!![j] = result[i - 1]!![j - weight]!!.toMutableSet()
-                    result[i]!![j]!!.add(treasures.toList()[i - 1].first)
-                } else {
-                    result[i]!![j] = result[i - 1]!![j]!!.toMutableSet()
-                }
+            if (weights[i - 1] <= j) {
+                dp[i][j] = dp[i - 1][j].coerceAtLeast(dp[i - 1][j - weights[i - 1]] + values[i - 1])
             } else {
-                result[i]!![j] = result[i - 1]!![j]!!.toMutableSet()
+                dp[i][j] = dp[i - 1][j]
             }
         }
     }
-    return result[treasures.size]!![capacity]!!
+    val result = mutableSetOf<String>()
+    var i = n
+    var j = capacity
+    while (i > 0 && j > 0) {
+        if (dp[i][j] != dp[i - 1][j]) {
+            result.add(names[i - 1])
+            j -= weights[i - 1]
+        }
+        i--
+    }
+    return result
 }
 
