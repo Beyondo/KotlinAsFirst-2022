@@ -211,16 +211,18 @@ fun bestHighJump(jumps: String): Int {
  */
 fun plusMinus(expression: String): Int {
     var tokens = mutableListOf<String>()
-    expression.split(" ").forEach { token ->
-        if (token == "+" || token == "-") {
+    expression.split(" ").forEachIndexed { index, token ->
+        if (token == "") throw IllegalArgumentException()
+        if (index % 2 == 0) {
+            if (!token.first().isDigit() || token.toIntOrNull() == null)
+                throw IllegalArgumentException()
             tokens.add(token)
         } else {
-            val number = token.toIntOrNull() ?: throw IllegalArgumentException()
-            tokens.add(number.toString())
+            if (token != "+" && token != "-") throw IllegalArgumentException()
+            tokens.add(token)
         }
     }
     if (tokens.size == 1) return tokens[0].toInt()
-    else if (tokens.size % 2 == 0) throw IllegalArgumentException()
     var result = tokens[0].toInt()
     for (i in 1 until tokens.size step 2) {
         if (tokens[i] == "+") result += tokens[i + 1].toInt()
@@ -370,7 +372,9 @@ fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
                 i = j
             } else stack.push(i)
 
-            ']' -> if (result[position] != 0) i = stack.peek() else stack.pop()
+            ']' -> if (result[position] != 0) i = stack.peek()
+            else if (stack.isNotEmpty()) stack.pop()
+
             ' ' -> {}
 
             else -> throw IllegalArgumentException()
