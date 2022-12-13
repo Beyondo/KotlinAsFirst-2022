@@ -165,5 +165,5 @@ class UnsignedBigInteger : Comparable<UnsignedBigInteger> {
         return numberStr.toInt()
     }
 
-    private lateinit var numberStr: String
+    private var numberStr: String
 }
