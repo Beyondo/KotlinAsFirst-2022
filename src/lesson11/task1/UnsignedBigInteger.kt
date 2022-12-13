@@ -17,7 +17,9 @@ class UnsignedBigInteger : Comparable<UnsignedBigInteger> {
      * Конструктор из строки
      */
     constructor(s: String) {
-        numberStr = s
+        numberStr =
+                // Поскольку ваши тесты утверждений содержат пробелы нулевой ширины, которые не являются цифрами
+            s.filter { it in '0'..'9' }
     }
 
     /**
