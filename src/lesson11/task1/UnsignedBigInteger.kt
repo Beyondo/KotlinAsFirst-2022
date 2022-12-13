@@ -104,33 +104,56 @@ class UnsignedBigInteger : Comparable<UnsignedBigInteger> {
      * Деление
      */
     operator fun div(other: UnsignedBigInteger): UnsignedBigInteger {
-        var first = numberStr
-        val second = other.numberStr
-        var result = ""
-        while (first.length >= second.length) {
-            var i = 0
-            while (first >= second) {
-                first = (UnsignedBigInteger(first) - UnsignedBigInteger(second)).numberStr
-                i++
+        var dividend = numberStr
+        var divisor = other.numberStr
+        var quotient = ""
+        var remainder = ""
+        var i = 0
+        while (i < dividend.length) {
+            remainder += dividend[i]
+            if (UnsignedBigInteger(remainder) < UnsignedBigInteger(divisor)) {
+                quotient += "0"
+            } else {
+                var j = 1
+                while (UnsignedBigInteger(divisor) * UnsignedBigInteger(j.toString()) <= UnsignedBigInteger(remainder)) {
+                    j++
+                }
+                quotient += (j - 1).toString()
+                remainder = (UnsignedBigInteger(remainder) - UnsignedBigInteger(divisor) * UnsignedBigInteger((j - 1).toString())).numberStr
             }
-            result += i
-            first = "0$first"
+            i++
         }
-        return UnsignedBigInteger(result)
+        return UnsignedBigInteger(quotient.trimStart('0'))
     }
 
     /**
      * Взятие остатка
      */
     operator fun rem(other: UnsignedBigInteger): UnsignedBigInteger {
-        var first = numberStr
-        val second = other.numberStr
-        while (first.length >= second.length) {
-            while (first >= second)
-                first = (UnsignedBigInteger(first) - UnsignedBigInteger(second)).numberStr
-            first = "0$first"
+        var dividend = numberStr
+        var divisor = other.numberStr
+        var quotient = ""
+        var remainder = ""
+        var i = 0
+        while (i < dividend.length) {
+            remainder += dividend[i]
+            if (UnsignedBigInteger(remainder) < UnsignedBigInteger(divisor)) {
+                quotient += "0"
+            } else {
+                var j = 1
+                while (UnsignedBigInteger(divisor) * UnsignedBigInteger(j.toString()) <= UnsignedBigInteger(remainder)) {
+                    j++
+                }
+                quotient += (j - 1).toString()
+                remainder =
+                    (UnsignedBigInteger(remainder) - UnsignedBigInteger(divisor) * UnsignedBigInteger(
+                        (j - 1).toString()
+                    )).numberStr
+            }
+            i++
         }
-        return UnsignedBigInteger(first)
+        if (remainder == "") remainder = "0"
+        return UnsignedBigInteger(remainder)
     }
 
     /**
@@ -159,9 +182,7 @@ class UnsignedBigInteger : Comparable<UnsignedBigInteger> {
     /**
      * Преобразование в строку
      */
-    override fun toString(): String {
-        return numberStr
-    }
+    override fun toString(): String = numberStr
 
     /**
      * Преобразование в целое
