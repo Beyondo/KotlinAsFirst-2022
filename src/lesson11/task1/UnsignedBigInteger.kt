@@ -55,16 +55,16 @@ class UnsignedBigInteger : Comparable<UnsignedBigInteger> {
         val second = other.numberStr.reversed()
         val result = StringBuilder()
         var carry = 0
-        for (i in 0 until first.length) {
+        for (i in first.indices) {
             val firstDigit = first[i].toString().toInt()
             val secondDigit = if (i < second.length) second[i].toString().toInt() else 0
             val diff = firstDigit - secondDigit - carry
-            if (diff < 0) {
+            carry = if (diff < 0) {
                 result.append(diff + 10)
-                carry = 1
+                1
             } else {
                 result.append(diff)
-                carry = 0
+                0
             }
         }
         return UnsignedBigInteger(result.toString().reversed().trimStart('0'))
@@ -78,10 +78,10 @@ class UnsignedBigInteger : Comparable<UnsignedBigInteger> {
         val second = other.numberStr.reversed()
         val result = StringBuilder()
         var carry = 0
-        for (i in 0 until first.length) {
-            val firstDigit = first[i].toString().toInt()
-            for (j in 0 until second.length) {
-                val secondDigit = second[j].toString().toInt()
+        for (element in first) {
+            val firstDigit = element.toString().toInt()
+            for (element in second) {
+                val secondDigit = element.toString().toInt()
                 val sum = firstDigit * secondDigit + carry
                 result.append(sum % 10)
                 carry = sum / 10
@@ -96,34 +96,33 @@ class UnsignedBigInteger : Comparable<UnsignedBigInteger> {
      * Деление
      */
     operator fun div(other: UnsignedBigInteger): UnsignedBigInteger {
-        var first = numberStr.reversed()
-        val second = other.numberStr.reversed()
-        val result = StringBuilder()
-        var carry = 0
-        for (i in 0 until first.length) {
-            val firstDigit = first[i].toString().toInt()
-            val sum = firstDigit + carry * 10
-            result.append(sum / second.toInt())
-            carry = sum % second.toInt()
+        var first = numberStr
+        val second = other.numberStr
+        var result = ""
+        while (first.length >= second.length) {
+            var i = 0
+            while (first >= second) {
+                first = (UnsignedBigInteger(first) - UnsignedBigInteger(second)).numberStr
+                i++
+            }
+            result += i
+            first = "0$first"
         }
-        return UnsignedBigInteger(result.toString().reversed().trimStart('0'))
+        return UnsignedBigInteger(result)
     }
 
     /**
      * Взятие остатка
      */
     operator fun rem(other: UnsignedBigInteger): UnsignedBigInteger {
-        var first = numberStr.reversed()
-        val second = other.numberStr.reversed()
-        val result = StringBuilder()
-        var carry = 0
-        for (i in 0 until first.length) {
-            val firstDigit = first[i].toString().toInt()
-            val sum = firstDigit + carry * 10
-            result.append(sum / second.toInt())
-            carry = sum % second.toInt()
+        var first = numberStr
+        val second = other.numberStr
+        while (first.length >= second.length) {
+            while (first >= second)
+                first = (UnsignedBigInteger(first) - UnsignedBigInteger(second)).numberStr
+            first = "0$first"
         }
-        return UnsignedBigInteger(carry.toString())
+        return UnsignedBigInteger(first)
     }
 
     /**
@@ -142,7 +141,7 @@ class UnsignedBigInteger : Comparable<UnsignedBigInteger> {
     override fun compareTo(other: UnsignedBigInteger): Int {
         if (numberStr.length > other.numberStr.length) return 1
         if (numberStr.length < other.numberStr.length) return -1
-        for (i in 0 until numberStr.length) {
+        for (i in numberStr.indices) {
             if (numberStr[i] > other.numberStr[i]) return 1
             if (numberStr[i] < other.numberStr[i]) return -1
         }
