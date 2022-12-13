@@ -2,9 +2,12 @@
 
 package lesson7.task1
 
+import lesson3.task1.digitNumber
 import java.io.File
 import java.lang.Math.max
+import java.lang.Math.pow
 import java.util.*
+import kotlin.math.pow
 
 // Урок 7: работа с файлами
 // Урок интегральный, поэтому его задачи имеют сильно увеличенную стоимость
@@ -682,23 +685,34 @@ fun markdownToHtml(inputName: String, outputName: String) {
  *
  */
 fun printMultiplicationProcess(lhv: Int, rhv: Int, outputName: String) {
-    val output = File(outputName).bufferedWriter()
-    val lhvStr = lhv.toString()
-    val rhvStr = rhv.toString()
-    val result = lhv * rhv
-    val resultStr = result.toString()
-    val maxLength = lhvStr.length.coerceAtLeast(rhvStr.length)
-    val maxLengthResult = maxLength.coerceAtLeast(resultStr.length)
-    output.write(" ".repeat(maxLengthResult - lhvStr.length) + lhvStr + "\n")
-    output.write("*" + " ".repeat(maxLengthResult - rhvStr.length - 1) + rhvStr + "\n")
-    output.write("-".repeat(maxLengthResult + 1) + "\n")
-    for (i in rhvStr.length - 1 downTo 0) {
-        val temp = lhv * (rhvStr[i] - '0')
-        output.write(" ".repeat(maxLengthResult - temp.toString().length) + temp + "\n")
+    val lhvLength = digitNumber(lhv)
+    val rhvLength = digitNumber(rhv)
+    val factors = rhv.toString().map { d -> lhv * (d - '0') }
+    val product =
+        (factors.mapIndexed { i, d -> d * 10.0.pow((rhvLength - i - 1).toDouble()) }.sum()).toInt()
+    val lineLength = maxOf(lhvLength, rhvLength, digitNumber(product), factors.maxOf { digitNumber(it) }) + 1
+    File(outputName).bufferedWriter().use { out ->
+        out.write("$lhv".padEnd(lineLength - lhvLength + 1, ' '))
+        out.newLine()
+        out.write("*" + "$rhv".padStart(lineLength - rhvLength - 1, ' '))
+        out.newLine()
+        out.write("-".repeat(lineLength))
+        out.newLine()
+        out.write(" ".repeat(lineLength - digitNumber(factors.last())) + factors.last())
+        out.newLine()
+        factors.indices.forEach { i ->
+            if (i != 0) {
+                out.write(
+                    "+" + " ".repeat(lineLength - digitNumber(factors[factors.lastIndex - i]) - i - 1)
+                            + factors[factors.lastIndex - i]
+                )
+                out.newLine()
+            }
+        }
+        out.write("-".repeat(lineLength))
+        out.newLine()
+        out.write(" ".repeat(lineLength - digitNumber(product)) + product)
     }
-    output.write("-".repeat(maxLengthResult + 1) + "\n")
-    output.write(" ".repeat(maxLengthResult - resultStr.length) + resultStr)
-    output.close()
 }
 
 

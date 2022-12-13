@@ -2,6 +2,8 @@
 
 package lesson8.task1
 
+import kotlin.math.absoluteValue
+
 /**
  * Точка (гекс) на шестиугольной сетке.
  * Координаты заданы как в примере (первая цифра - y, вторая цифра - x)
@@ -36,7 +38,16 @@ data class HexPoint(val x: Int, val y: Int) {
      * Расстояние вычисляется как число единичных отрезков в пути между двумя гексами.
      * Например, путь межу гексами 16 и 41 (см. выше) может проходить через 25, 34, 43 и 42 и имеет длину 5.
      */
-    fun distance(other: HexPoint): Int = TODO()
+    fun distance(other: HexPoint): Int {
+        val x1 = this.x
+        val y1 = this.y
+        val x2 = other.x
+        val y2 = other.y
+        val x = (x1 - x2).absoluteValue
+        val y = (y1 - y2).absoluteValue
+        val z = (x1 + y1 - x2 - y2).absoluteValue
+        return maxOf(x, y, z)
+    }
 
     override fun toString(): String = "$y.$x"
 }
@@ -59,14 +70,34 @@ data class Hexagon(val center: HexPoint, val radius: Int) {
      * и другим шестиугольником B с центром в 26 и радиуоом 2 равно 2
      * (расстояние между точками 32 и 24)
      */
-    fun distance(other: Hexagon): Int = TODO()
+    fun distance(other: Hexagon): Int {
+        val x1 = this.center.x
+        val y1 = this.center.y
+        val x2 = other.center.x
+        val y2 = other.center.y
+        val x = (x1 - x2).absoluteValue
+        val y = (y1 - y2).absoluteValue
+        val z = (x1 + y1 - x2 - y2).absoluteValue
+        val distance = maxOf(x, y, z)
+        return if (distance > this.radius + other.radius) distance - this.radius - other.radius else 0
+    }
 
     /**
      * Тривиальная (1 балл)
      *
      * Вернуть true, если заданная точка находится внутри или на границе шестиугольника
      */
-    fun contains(point: HexPoint): Boolean = TODO()
+    fun contains(point: HexPoint): Boolean {
+        val x1 = this.center.x
+        val y1 = this.center.y
+        val x2 = point.x
+        val y2 = point.y
+        val x = (x1 - x2).absoluteValue
+        val y = (y1 - y2).absoluteValue
+        val z = (x1 + y1 - x2 - y2).absoluteValue
+        val distance = maxOf(x, y, z)
+        return distance <= this.radius
+    }
 }
 
 /**
@@ -81,7 +112,16 @@ class HexSegment(val begin: HexPoint, val end: HexPoint) {
      * Такими являются, например, отрезок 30-34 (горизонталь), 13-63 (прямая диагональ) или 51-24 (косая диагональ).
      * А, например, 13-26 не является "правильным" отрезком.
      */
-    fun isValid(): Boolean = TODO()
+    fun isValid(): Boolean {
+        val x1 = this.begin.x
+        val y1 = this.begin.y
+        val x2 = this.end.x
+        val y2 = this.end.y
+        val x = (x1 - x2).absoluteValue
+        val y = (y1 - y2).absoluteValue
+        val z = (x1 + y1 - x2 - y2).absoluteValue
+        return x == 0 || y == 0 || z == 0
+    }
 
     /**
      * Средняя (3 балла)
@@ -90,7 +130,35 @@ class HexSegment(val begin: HexPoint, val end: HexPoint) {
      * Для "правильного" отрезка выбирается одно из первых шести направлений,
      * для "неправильного" -- INCORRECT.
      */
-    fun direction(): Direction = TODO()
+    fun direction(): Direction {
+        // Note for self: There's no UP and DOWN directions in Hexagon
+        val x1 = this.begin.x
+        val y1 = this.begin.y
+        val x2 = this.end.x
+        val y2 = this.end.y
+        val x = (x1 - x2).absoluteValue
+        val y = (y1 - y2).absoluteValue
+        val z = (x1 + y1 - x2 - y2).absoluteValue
+        return when {
+            x == 0 && y == 0 -> Direction.INCORRECT
+            x == 1 && y == 0 -> Direction.RIGHT
+            x == 1 && y == 1 -> Direction.UP_RIGHT
+            x == 2 && y == 0 -> Direction.RIGHT
+            x == 2 && y == 1 -> Direction.UP_RIGHT
+            x == 2 && y == 2 -> Direction.UP_RIGHT
+            x == 1 && z == 0 -> Direction.LEFT
+            x == 1 && z == 1 -> Direction.DOWN_LEFT
+            x == 2 && z == 0 -> Direction.LEFT
+            x == 2 && z == 1 -> Direction.DOWN_LEFT
+            x == 2 && z == 2 -> Direction.DOWN_LEFT
+            y == 1 && z == 0 -> Direction.RIGHT
+            y == 1 && z == 1 -> Direction.UP_RIGHT
+            y == 2 && z == 0 -> Direction.RIGHT
+            y == 2 && z == 1 -> Direction.UP_RIGHT
+            y == 2 && z == 2 -> Direction.UP_RIGHT
+            else -> Direction.INCORRECT
+        }
+    }
 
     override fun equals(other: Any?) =
         other is HexSegment && (begin == other.begin && end == other.end || end == other.begin && begin == other.end)
