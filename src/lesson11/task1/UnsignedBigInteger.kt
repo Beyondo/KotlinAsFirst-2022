@@ -78,13 +78,19 @@ class UnsignedBigInteger : Comparable<UnsignedBigInteger> {
         val second = other.numberStr.reversed()
         val result = StringBuilder()
         var carry = 0
-        for (element in first) {
-            val firstDigit = element.toString().toInt()
-            for (element in second) {
-                val secondDigit = element.toString().toInt()
-                val sum = firstDigit * secondDigit + carry
-                result.append(sum % 10)
-                carry = sum / 10
+        for (i in first.indices) {
+            val firstDigit = first[i].toString().toInt()
+            for (j in second.indices) {
+                val secondDigit = second[j].toString().toInt()
+                val product = firstDigit * secondDigit + carry
+                if (i + j < result.length) {
+                    val sum = product + result[i + j].toString().toInt()
+                    result.setCharAt(i + j, (sum % 10).toString()[0])
+                    carry = sum / 10
+                } else {
+                    result.append(product % 10)
+                    carry = product / 10
+                }
             }
             if (carry > 0) result.append(carry)
             carry = 0
