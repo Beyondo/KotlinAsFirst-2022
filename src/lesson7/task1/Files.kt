@@ -69,12 +69,11 @@ fun alignFile(inputName: String, lineLength: Int, outputName: String) {
  *
  */
 fun deleteMarked(inputName: String, outputName: String) {
-    val writer = File(outputName).bufferedWriter()
-    File(inputName).readLines().forEach { line ->
-        if (!line.startsWith("_"))
-            writer.write(line + "\n")
+    File(outputName).bufferedWriter().use { writer ->
+        File(inputName).forEachLine { line ->
+            if (line.isNotEmpty() && line[0] != '_') writer.write(line + "\n")
+        }
     }
-    writer.close()
 }
 
 /**

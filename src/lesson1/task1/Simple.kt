@@ -3,6 +3,8 @@
 package lesson1.task1
 
 import junit.framework.TestCase.*
+import lesson11.task1.UnsignedBigInteger
+import lesson12.task1.TableFunction
 import lesson2.task1.*
 import lesson2.task2.*
 import lesson3.task1.*
@@ -10,7 +12,13 @@ import lesson4.task1.*
 import lesson5.task1.*
 import lesson6.task1.*
 import lesson7.task1.*
+import lesson8.task1.*
+import lesson9.task1.Cell
+import lesson9.task1.Matrix
+import org.junit.Assert.assertNotEquals
 import java.io.File
+import java.lang.ArithmeticException
+import java.lang.IllegalArgumentException
 
 import kotlin.math.*
 
@@ -62,17 +70,62 @@ fun quadraticRootProduct(a: Double, b: Double, c: Double): Double {
 /**
  * Пример главной функции
  */
+
+
+private fun approxEquals(expected: Line, actual: Line, delta: Double): Boolean =
+    abs(expected.angle - actual.angle) <= delta && abs(expected.b - actual.b) <= delta
+
+private fun assertApproxEquals(expected: Line, actual: Line, delta: Double = Math.ulp(10.0)) {
+    assertTrue(approxEquals(expected, actual, delta))
+}
+
+private fun assertApproxNotEquals(expected: Line, actual: Line, delta: Double = Math.ulp(10.0)) {
+    assertFalse(approxEquals(expected, actual, delta))
+}
+
+private fun approxEquals(expected: Point, actual: Point, delta: Double): Boolean =
+    expected.distance(actual) <= delta
+
+private fun assertApproxEquals(expected: Point, actual: Point, delta: Double = Math.ulp(10.0)) {
+    assertTrue(approxEquals(expected, actual, delta))
+}
+
+private fun approxEquals(expected: Segment, actual: Segment, delta: Double): Boolean =
+    expected.begin.distance(actual.begin) <= delta && expected.end.distance(actual.end) <= delta
+
+private fun assertApproxEquals(expected: Segment, actual: Segment, delta: Double = Math.ulp(10.0)) {
+    assertTrue(approxEquals(expected, actual, delta))
+}
+
+private fun approxEquals(expected: Circle, actual: Circle, delta: Double): Boolean =
+    expected.center.distance(actual.center) <= delta && abs(expected.radius - actual.radius) <= delta
+
+fun assertApproxEquals(expected: Circle, actual: Circle, delta: Double = Math.ulp(10.0)) {
+    assertTrue(approxEquals(expected, actual, delta))
+}
+fun assertTrue(b: Boolean, function: () -> String) {
+    if (!b) throw AssertionError(function())
+}
+
 fun main() {
     println("STARTED")
-    assertEquals(1, maxDivisor(17))
-    assertEquals(12, maxDivisor(24))
-    assertEquals(59, maxDivisor(177))
-    assertEquals(17, maxDivisor(34))
-    assertEquals(7, maxDivisor(49))
-    assertEquals(509, maxDivisor(8653))
-    assertEquals(1, maxDivisor(2124679))
-    assertEquals(1, maxDivisor(1073676287))
-    assertEquals(1, maxDivisor(Int.MAX_VALUE))
+
+    assertEquals(
+        mapOf<String, Double>(),
+        averageStockPrice(listOf())
+    )
+    assertEquals(
+        mapOf("MSFT" to 100.0, "NFLX" to 40.0),
+        averageStockPrice(listOf("MSFT" to 100.0, "NFLX" to 40.0))
+    )
+    assertEquals(
+        mapOf("MSFT" to 150.0, "NFLX" to 40.0),
+        averageStockPrice(listOf("MSFT" to 100.0, "MSFT" to 200.0, "NFLX" to 40.0))
+    )
+    assertEquals(
+        mapOf("MSFT" to 150.0, "NFLX" to 45.0),
+        averageStockPrice(listOf("MSFT" to 100.0, "MSFT" to 200.0, "NFLX" to 40.0, "NFLX" to 50.0))
+    )
     println("ENDED")
 }
 
