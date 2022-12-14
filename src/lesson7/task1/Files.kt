@@ -121,15 +121,9 @@ fun sibilants(inputName: String, outputName: String) {
     val correctedVowels = mapOf('ы' to 'и', 'я' to 'а', 'ю' to 'у', 'Ы' to 'И', 'Я' to 'А', 'Ю' to 'У')
     var text = File(inputName).readText().toCharArray()
     text.forEachIndexed { i, char ->
-        if (i < text.size - 1) {
-            val word = text.slice(i until text.size).toString().split(" ").first()
-            if (char.lowercaseChar() in sibilants) {
-                val nextChar = text[i + 1]
-                if (nextChar in correctedVowels.keys) {
-                    text[i + 1] = correctedVowels[nextChar]!!
-                }
-            }
-        }
+        if (i < text.size - 1)
+            if (char.lowercaseChar() in sibilants && text[i + 1] in correctedVowels.keys)
+                text[i + 1] = correctedVowels[text[i + 1]]!!
     }
     writer.write(text)
     writer.close()
